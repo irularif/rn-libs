@@ -16,7 +16,11 @@ export default () => {
   const splash = DefaultTheme.splashImage;
 
   return (
-    <Screen>
+    <Screen
+      statusBar={{
+        backgroundColor: "#00000000",
+      }}
+    >
       <ImageBackground
         source={splash}
         style={{

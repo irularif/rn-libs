@@ -1,10 +1,9 @@
 import Fonts from "../assets/fonts";
-import { StyleSheet, TextStyle, ViewStyle } from "react-native";
+import { StatusBarProps, StyleSheet, TextStyle, ViewStyle } from "react-native";
 import {
   DefaultTheme as DefaultThemeOrigin,
   DarkTheme as DarkThemeOrigin,
 } from "app/config/theme";
-import { StatusBarProps } from "expo-status-bar";
 
 export interface ITheme {
   dark: boolean;
