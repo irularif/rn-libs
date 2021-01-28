@@ -23,13 +23,11 @@ export default () => {
     >
       <ImageBackground
         source={splash}
-        style={{
-          backgroundColor: "#fff",
-        }}
         imageStyle={{
           height,
           width,
         }}
+        resizeMode="center"
       >
         <View
           style={{
