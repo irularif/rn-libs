@@ -16,8 +16,6 @@ export interface IField {
   hiddenLabel?: boolean;
   path: string;
   value?: string;
-  Prefix?: ReactElement;
-  Suffix?: ReactElement;
   children: ReactElement;
   style?: ViewStyle;
   styles?: {
@@ -29,10 +27,22 @@ export interface IField {
   initializeField?: IFormField;
   editable?: boolean;
   onChange?: (value: any) => void;
+  Prefix?: ReactElement;
+  Suffix?: ReactElement;
+  Info?: ReactElement;
 }
 
 export default observer((props: IField) => {
-  const { label, hiddenLabel, Prefix, Suffix, style, styles, editable } = props;
+  const {
+    label,
+    hiddenLabel,
+    Prefix,
+    Suffix,
+    style,
+    styles,
+    editable,
+    Info,
+  } = props;
   const Theme: ITheme = useTheme() as any;
   const Input = generateInput(props);
 
@@ -101,6 +111,7 @@ export default observer((props: IField) => {
         {Input}
         {Suffix}
       </View>
+      {Info}
       <ErrorMessage {...props} />
     </View>
   );

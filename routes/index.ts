@@ -1,5 +1,8 @@
+import { DrawerNavigationOptions } from "@react-navigation/drawer";
+import { DrawerNavigationConfig } from "@react-navigation/drawer/lib/typescript/src/types";
 import {
   DefaultNavigatorOptions,
+  DrawerRouterOptions,
   StackRouterOptions,
 } from "@react-navigation/native";
 import { StackNavigationOptions } from "@react-navigation/stack";
@@ -10,7 +13,10 @@ import { IIcon } from "../ui/Icon";
 export type TStackProps = Partial<
   DefaultNavigatorOptions<StackNavigationOptions> &
     StackRouterOptions &
-    StackNavigationConfig
+    StackNavigationConfig &
+    DefaultNavigatorOptions<DrawerNavigationOptions> &
+    DrawerRouterOptions &
+    DrawerNavigationConfig
 >;
 
 export interface IRoute {

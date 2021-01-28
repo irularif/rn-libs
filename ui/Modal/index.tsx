@@ -1,6 +1,4 @@
-import set from "lodash.set";
-import get from "lodash.get";
-import { observer } from "mobx-react-lite";
+import { observer } from "mobx-react";
 import React from "react";
 import {
   Modal,

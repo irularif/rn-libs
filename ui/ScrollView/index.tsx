@@ -1,5 +1,5 @@
 import get from "lodash.get";
-import { observer } from "mobx-react-lite";
+import { observer } from "mobx-react";
 import React, { ReactNode } from "react";
 import {
   KeyboardAvoidingView,

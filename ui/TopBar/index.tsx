@@ -1,25 +1,18 @@
-import {
-  useIsFocused,
-  useNavigation,
-  useTheme,
-} from "@react-navigation/native";
+import { useTheme } from "@react-navigation/native";
 import { ITheme } from "libs/config/theme";
-import get from "lodash.get";
-import { runInAction } from "mobx";
 import { useLocalObservable } from "mobx-react";
-import React, { ReactElement, useEffect } from "react";
+import React, { ReactElement } from "react";
 import {
-  BackHandler,
   Platform,
   StyleSheet,
   TextStyle,
   ViewProps,
   ViewStyle,
 } from "react-native";
-import Button, { IButtonProps } from "../Button";
+import Button from "../Button";
 import Icon, { IIcon } from "../Icon";
 import { statusBarHeight } from "../Screen";
-import Text, { ITextProps } from "../Text";
+import Text from "../Text";
 import View from "../View";
 import { generateTopBar } from "./generator";
 

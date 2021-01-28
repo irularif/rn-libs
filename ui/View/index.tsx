@@ -1,6 +1,6 @@
 import { useTheme } from "@react-navigation/native";
 import { ITheme } from "libs/config/theme";
-import { observer } from "mobx-react-lite";
+import { observer } from "mobx-react";
 import React, { ReactNode } from "react";
 import {
   ScrollView,

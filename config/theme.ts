@@ -1,10 +1,10 @@
 import Fonts from "../assets/fonts";
-import customTheme from "app/config/theme";
-import { StatusBarProps, StyleSheet, TextStyle, ViewStyle } from "react-native";
+import { StyleSheet, TextStyle, ViewStyle } from "react-native";
 import {
   DefaultTheme as DefaultThemeOrigin,
   DarkTheme as DarkThemeOrigin,
 } from "app/config/theme";
+import { StatusBarProps } from "expo-status-bar";
 
 export interface ITheme {
   dark: boolean;
@@ -38,9 +38,9 @@ export interface ITheme {
   shadow: any;
   statusBar: StatusBarProps;
   styles: {
-    field: ViewStyle;
-    input: TextStyle;
-    button: ViewStyle;
+    field?: ViewStyle;
+    input?: TextStyle;
+    button?: ViewStyle;
   };
   errorImage: any;
   loadingImage: any;
@@ -132,53 +132,3 @@ export const DarkTheme: ITheme = Object.assign(
   },
   DarkThemeOrigin
 );
-
-const Theme = Object.assign(
-  {
-    StatusBarStyle: "dark-content",
-    StatusBarBackgroundColor: "#ffffff",
-    UIShadow: {
-      shadowColor: "#000",
-      shadowOffset: {
-        width: 0,
-        height: 3,
-      },
-      shadowOpacity: 0.27,
-      shadowRadius: 4.65,
-      elevation: 6,
-    },
-    UIColors: {
-      primary: "#311B92",
-      secondary: "#F4F7FF",
-      danger: "#eb4559",
-      text: "#333",
-      background: "#fff",
-      success: "#4caf50",
-      warning: "#ffb367",
-    },
-    UIFontSize: 16,
-    UIFontFamily: Fonts.Roboto,
-    UIImageLoading: require("../assets/images/loading.png"),
-    UIImageError: require("../assets/images/error.png"),
-    UISplashScreen: require("../assets/images/splash.png"),
-    UIField: {
-      minWidth: 10,
-      marginBottom: 15,
-    },
-    UIInput: {
-      padding: 0,
-      borderRadius: 4,
-      borderStyle: "solid",
-      borderWidth: 1,
-      borderColor: "#aaa",
-      minWidth: 10,
-      backgroundColor: "white",
-    },
-    UILabel: {},
-    UIButton: {},
-    LocalLang: "enUS",
-  },
-  customTheme
-);
-
-export default Theme;

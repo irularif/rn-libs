@@ -16,9 +16,9 @@ export default (props: ITextProps) => {
   const { style } = props;
   const Theme: ITheme = useTheme() as any;
   const baseStyle: TextStyle = {
-    fontSize: Theme.fontSize.h6,
-    fontFamily: Theme.fontStyle.regular,
-    color: Theme.colors.text,
+    fontSize: Theme?.fontSize?.h6 || 14,
+    fontFamily: Theme?.fontStyle?.regular,
+    color: Theme?.colors?.text,
   };
   const cstyle = StyleSheet.flatten([baseStyle, style]);
 

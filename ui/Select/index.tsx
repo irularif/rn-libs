@@ -1,6 +1,5 @@
 import { useTheme } from "@react-navigation/native";
 import { ITheme } from "libs/config/theme";
-import { shadeColor } from "libs/utils/color";
 import { observer, useLocalObservable } from "mobx-react";
 import React, { ReactElement } from "react";
 import { StyleSheet, Text, TextStyle, ViewStyle } from "react-native";

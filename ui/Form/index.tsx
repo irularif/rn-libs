@@ -1,19 +1,16 @@
-import { isValid } from "date-fns";
+import { useTheme } from "@react-navigation/native";
+import Fonts from "libs/assets/fonts";
+import { ITheme } from "libs/config/theme";
+import get from "lodash.get";
+import isplainobject from "lodash.isplainobject";
 import set from "lodash.set";
-import { runInAction, toJS } from "mobx";
-import { observer, useLocalObservable } from "mobx-react-lite";
+import { runInAction } from "mobx";
+import { observer, useLocalObservable } from "mobx-react";
 import React, { ReactElement, useEffect } from "react";
-import { ViewStyle } from "react-native";
 import * as Yup from "yup";
 import { ObjectShape } from "yup/lib/object";
 import Button from "../Button";
 import Text from "../Text";
-import View, { IViewProps } from "../View";
-import isplainobject from "lodash.isplainobject";
-import get from "lodash.get";
-import Fonts from "libs/assets/fonts";
-import { useTheme } from "@react-navigation/native";
-import { ITheme } from "libs/config/theme";
 
 export interface IError {
   [k: string]: string;

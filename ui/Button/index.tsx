@@ -3,6 +3,7 @@ import { ITheme } from "libs/config/theme";
 import get from "lodash.get";
 import React from "react";
 import {
+  StyleSheet,
   TextStyle,
   TouchableOpacity,
   TouchableOpacityProps,
@@ -37,10 +38,12 @@ export default (props: IButtonProps) => {
   const Theme: ITheme = useTheme() as any;
   const cprops = { ...props };
   delete cprops.styles;
-  const disabledStyle = {
-    opacity: 0.5,
-    ...get(props, "styles.disabled", {}),
-  };
+  const disabledStyle = StyleSheet.flatten([
+    {
+      opacity: 0.5,
+    },
+    props?.styles?.disabled,
+  ]);
   const shadowStyle = !!shadow ? Theme.shadow : {};
   const containedStyle: ViewStyle = {
     backgroundColor: Theme.colors.primary,
@@ -49,28 +52,31 @@ export default (props: IButtonProps) => {
     borderWidth: 1,
     borderStyle: "solid",
     borderColor: Theme.colors.primary,
-    backgroundColor: Theme.colors.card,
+    backgroundColor: "transparent",
   };
   const cleanStyle: ViewStyle = {
     backgroundColor: "transparent",
   };
-  const cstyle: ViewStyle = {
-    flexDirection: "row",
-    alignItems: "center",
-    justifyContent: "center",
-    borderRadius: 4,
-    padding: 16,
-    paddingVertical: 8,
-    margin: 4,
-    ...shadowStyle,
-    ...(mode === "outlined"
+  const cstyle: ViewStyle = StyleSheet.flatten([
+    {
+      flexDirection: "row",
+      alignItems: "center",
+      justifyContent: "center",
+      borderRadius: 4,
+      padding: 16,
+      paddingVertical: 8,
+      margin: 4,
+    },
+    shadowStyle,
+    Theme.styles?.button,
+    mode === "outlined"
       ? outlinedStyle
       : mode === "clean"
       ? cleanStyle
-      : containedStyle),
-    ...style,
-    ...(disabled !== true ? {} : disabledStyle),
-  };
+      : containedStyle,
+    props?.style,
+    disabled !== true ? {} : disabledStyle,
+  ]);
 
   return (
     <TouchableOpacity activeOpacity={0.6} {...cprops} style={cstyle}>

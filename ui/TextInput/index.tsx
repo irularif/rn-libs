@@ -18,10 +18,11 @@ export type IInputType =
 export interface ITextInput extends TextInputProps {
   type: IInputType;
   onChangeValue?: (value: string) => void;
+  inputRef?: any;
 }
 
 export default observer((props: ITextInput) => {
-  const { type, onChangeValue, style, editable, value } = props;
+  const { type, onChangeValue, style, editable, value, inputRef } = props;
   const [secure, setsecure] = useState(true);
   const originalType = useRef(type);
   const Theme: ITheme = useTheme() as any;
@@ -51,7 +52,7 @@ export default observer((props: ITextInput) => {
     onChangeValue && onChangeValue(v);
   };
 
-  const cprops = { ...props, onChangeText: setValue };
+  const cprops = { ...props, onChangeText: setValue, ref: inputRef };
   const cstyle = StyleSheet.flatten([
     {
       flex: 1,

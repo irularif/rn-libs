@@ -1,7 +1,8 @@
-import Theme from "libs/config/theme";
+import { useTheme } from "@react-navigation/native";
+import { ITheme } from "libs/config/theme";
 import _ from "lodash";
 import { runInAction } from "mobx";
-import { observer, useLocalObservable } from "mobx-react-lite";
+import { observer, useLocalObservable } from "mobx-react";
 import React, { ReactElement, useRef } from "react";
 import { Dimensions, StyleSheet, ViewStyle } from "react-native";
 import Carousel, {
@@ -20,6 +21,7 @@ export interface ICarouselProps extends OriginCarouselProps<any> {
 }
 
 export default observer((props: ICarouselProps) => {
+  const Theme: ITheme = useTheme() as any;
   const { children, data, carouselRef, paginationProps } = props;
   const carouselProps: any = { ...props };
   delete carouselProps.children;
@@ -59,6 +61,7 @@ export default observer((props: ICarouselProps) => {
 });
 
 const RenderPagination = observer((props: any) => {
+  const Theme: ITheme = useTheme() as any;
   const { child, meta, data, paginationProps } = props;
 
   if (!!child) {
@@ -73,7 +76,7 @@ const RenderPagination = observer((props: any) => {
         height: 8,
         width: 8,
         borderRadius: 20,
-        backgroundColor: Theme.UIColors.primary,
+        backgroundColor: Theme.colors.primary,
       }}
       dotContainerStyle={{
         marginLeft: 3,
@@ -88,6 +91,7 @@ const RenderPagination = observer((props: any) => {
 
 export const CarouselPagination = observer(
   (props: Partial<OriginPaginationProps>) => {
+    const Theme: ITheme = useTheme() as any;
     const baseContainerStyle = StyleSheet.flatten([
       {
         paddingHorizontal: 0,
@@ -103,7 +107,7 @@ export const CarouselPagination = observer(
           height: 8,
           width: 8,
           borderRadius: 20,
-          backgroundColor: Theme.UIColors.primary,
+          backgroundColor: Theme.colors.primary,
         }}
         dotContainerStyle={{
           marginLeft: 3,
