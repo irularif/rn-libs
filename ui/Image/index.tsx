@@ -59,7 +59,6 @@ const ImageThumbnail = observer((props: IImage) => {
     height: "100%",
   };
   const cstyle = StyleSheet.flatten([baseStyle, style]);
-  console.log(cstyle);
   return <FastImage resizeMode="contain" {...props} style={cstyle} />;
 });
 
