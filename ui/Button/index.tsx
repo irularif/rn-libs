@@ -1,5 +1,5 @@
 import { useTheme } from "@react-navigation/native";
-import { ITheme } from "libs/config/theme";
+import { ITheme } from "../../config/theme";
 import get from "lodash.get";
 import React from "react";
 import {

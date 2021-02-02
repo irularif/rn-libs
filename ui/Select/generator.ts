@@ -1,4 +1,4 @@
-import fuzzyMatch from "libs/utils/fuzzy-match";
+import fuzzyMatch from "../../utils/fuzzy-match";
 import { runInAction } from "mobx";
 import { ICSelect, ISelect } from ".";
 

@@ -1,5 +1,5 @@
 import { useTheme } from "@react-navigation/native";
-import { ITheme } from "libs/config/theme";
+import { ITheme } from "../../config/theme";
 import React from "react";
 import { Dimensions } from "react-native";
 import { WebView, WebViewProps } from "react-native-webview";

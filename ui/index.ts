@@ -26,4 +26,5 @@ export { default as ImageBackground } from "./ImageBackground";
 export { default as SectionList } from "./SectionList";
 export { default as BarCodeScanner } from "./BarCodeScanner";
 export { default as DocumentPicker } from "./DocumentPicker";
+export { default as ReactNavigation } from "./ReactNavigation";
 export { default as Carousel, CarouselPagination } from "./Carousel";

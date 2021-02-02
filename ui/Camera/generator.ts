@@ -1,7 +1,7 @@
 import { Camera, CameraPictureOptions } from "expo-camera";
 import * as ImagePicker from "expo-image-picker";
-import imagePicker from "libs/utils/image-picker";
-import imageResizer from "libs/utils/image-resizer";
+import imagePicker from "../../utils/image-picker";
+import imageResizer from "../../utils/image-resizer";
 import { runInAction } from "mobx";
 import { MutableRefObject, useEffect } from "react";
 import { Dimensions } from "react-native";

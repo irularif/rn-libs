@@ -1,5 +1,5 @@
 import { Permissions } from "react-native-unimodules";
-import customPermission from "app/config/permissions";
+import customPermission from "../../app/config/permissions";
 
 let permissionsRequest = [
   Permissions.CAMERA,

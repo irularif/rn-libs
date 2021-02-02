@@ -5,7 +5,7 @@ import { ViewStyle } from "react-native";
 import Button from "../Button";
 import { generateDocumentPicker } from "./generator";
 import Icon from "../Icon";
-import { ITheme } from "libs/config/theme";
+import { ITheme } from "../../config/theme";
 import { useTheme } from "@react-navigation/native";
 import Text from "../Text";
 

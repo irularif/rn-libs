@@ -1,4 +1,4 @@
-import { dateFormat } from "libs/utils/date";
+import { dateFormat } from "../../utils/date";
 import { runInAction } from "mobx";
 import { useEffect } from "react";
 import { Platform } from "react-native";

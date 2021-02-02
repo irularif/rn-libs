@@ -1,4 +1,4 @@
-import documentPicker from "libs/utils/document-picker";
+import documentPicker from "../../utils/document-picker";
 import { StyleSheet, ViewStyle } from "react-native";
 import { IDocumentPicker } from ".";
 import mime from "mime-types";

@@ -3,7 +3,7 @@ import { StatusBarProps, StyleSheet, TextStyle, ViewStyle } from "react-native";
 import {
   DefaultTheme as DefaultThemeOrigin,
   DarkTheme as DarkThemeOrigin,
-} from "app/config/theme";
+} from "../../app/config/theme";
 
 export interface ITheme {
   dark: boolean;

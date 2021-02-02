@@ -1,4 +1,4 @@
-import AppConfig from "app/config/app";
+import AppConfig from "../../config/app";
 import React, { ReactElement, ReactNode, useEffect, useState } from "react";
 import { ViewProps } from "react-native";
 import codePush from "react-native-code-push";

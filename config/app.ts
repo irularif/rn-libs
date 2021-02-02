@@ -1,4 +1,4 @@
-import AppConfig from "app/config/app";
+import AppConfig from "../../app/config/app";
 
 export type TMode = "production" | "staging" | "dev" | string;
 export interface IAppConfig {

@@ -1,4 +1,4 @@
-import customFonts from "app/assets/fonts";
+import customFonts from "../../../app/assets/fonts";
 
 export const sourceFonts = {
   Roboto: require("./Roboto-Regular.ttf"),

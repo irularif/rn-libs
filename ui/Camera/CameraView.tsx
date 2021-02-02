@@ -1,6 +1,6 @@
 import { useTheme } from "@react-navigation/native";
 import { Camera, CameraPictureOptions, CameraProps } from "expo-camera";
-import { ITheme } from "libs/config/theme";
+import { ITheme } from "../../config/theme";
 import { runInAction } from "mobx";
 import { observer, useLocalObservable } from "mobx-react";
 import React, { MutableRefObject, useEffect, useRef } from "react";

@@ -1,6 +1,6 @@
 import { useTheme } from "@react-navigation/native";
-import Fonts from "libs/assets/fonts";
-import { ITheme } from "libs/config/theme";
+import Fonts from "../../assets/fonts";
+import { ITheme } from "../../config/theme";
 import get from "lodash.get";
 import isplainobject from "lodash.isplainobject";
 import set from "lodash.set";
