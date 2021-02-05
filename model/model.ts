@@ -1,109 +1,98 @@
 import AsyncStorage from "@react-native-async-storage/async-storage";
+import debounce from "lodash.debounce";
 import {
   action,
+  autorun,
   computed,
-  IReactionDisposer,
   isObservable,
   makeObservable,
   observable,
-  reaction,
   runInAction,
   toJS,
 } from "mobx";
 
-export interface Type<T> extends Function {
-  new (...args: any[]): T;
-}
-
 export interface ModelOptions {
-  autoload?: boolean;
   localStorage?: boolean;
   storageName?: string;
 }
 
-export interface IQuery<T> {
-  take?: number;
-  skip?: number;
+class ArrayModel<T> extends Array<T> {
+  private _model: any;
+  private _parent: any;
+
+  constructor(model?: any, parent?: any) {
+    super();
+    this._model = model;
+    this._parent = parent;
+  }
 }
 
-export abstract class Model<M extends Model = any> {
-  public _parent?: M;
-  private _opt: ModelOptions = {};
-  static __type = "model";
-
-  constructor() {}
-
-  public _afterLoadStorage(data: Model) {}
+export abstract class Model {
+  private _init: boolean = false;
+  private _options: ModelOptions = {};
+  private _arrClass: any = {};
+  public _parent?: Model;
 
   public static create<T extends Model>(
-    this: { new (options: ModelOptions): T },
+    this: { new (): T },
     options?: ModelOptions
   ) {
-    const obj = new this(options ?? {}) as T;
-
+    const obj: T = new this();
     if (options) {
-      obj._opt = options;
+      obj._options = options;
     }
-
     obj._initMobx(obj);
+    autorun(() => {
+      obj.saveToLocalStorage(obj._json);
+    });
 
     return obj;
   }
-
-  public static childOf<T extends Model>(
-    this: { new (options: ModelOptions): T },
-    parent: Model,
-    options?: ModelOptions
-  ) {
-    const obj = new this(options ?? {}) as T;
-
-    if (options) {
-      obj._opt = options;
-    }
-
+  public static childOf<T extends Model>(this: { new (): T }, parent: Model) {
+    const obj: T = new this();
     obj._parent = parent;
 
     return obj;
   }
 
-  private async _initMobx(self: any) {
-    if (self._init) return;
-    const obj = {} as any;
+  public static hasMany<T extends Model>(this: { new (): T }, parent: Model) {
+    const c = this;
+    const arr: T[] = new ArrayModel<T>(c, parent);
 
-    const props: string[] = [];
+    return arr;
+  }
+
+  private async _initMobx(self: Model) {
+    if (self._init) return;
+    self._init = true;
+
+    const obj = {} as any;
 
     for (let i of Object.getOwnPropertyNames(self)) {
       if (i.indexOf("_") === 0) continue;
 
-      const val = self[i];
+      const val = (self as any)[i];
       let isObservable = true;
       const type = getType(val);
-      switch (type) {
-        case "model":
-          props.push(i);
-          if (val._parent === self) {
-            if (!!this._opt.localStorage) {
-              val._opt.localStorage = true;
-            }
-            val._initMobx(val);
-            isObservable = false;
-          }
-          break;
+
+      if (!!type) {
+        if (type === "ArrayModel") {
+          self._arrClass[i] = [val._model, val._parent];
+        } else if (val instanceof Model) {
+          val._initMobx(val);
+          isObservable = false;
+        }
       }
 
       if (isObservable) {
-        if (typeof val !== "function") {
-          obj[i] = observable;
-          props.push(i);
-        }
+        obj[i] = observable;
       }
-      self._init = true;
     }
 
     const methods = Object.getOwnPropertyNames(Object.getPrototypeOf(self));
     for (let i of methods) {
       if (i !== "constructor" && i.indexOf("_") !== 0) {
-        if (typeof self[i] === "function") {
+        if (typeof (self as any)[i] === "function") {
           obj[i] = action;
         } else {
           obj[i] = computed;
@@ -111,91 +100,16 @@ export abstract class Model<M extends Model = any> {
       }
     }
 
-    makeObservable(this, obj);
-
-    if (!!this._opt.localStorage) {
-      this._opt.localStorage = true;
-
-      if (!this._parent) {
-        // children model will be loaded from it's parent
-        // so, we load only the parent
-        // and it will extract it's value to it's children.
-        await this.loadFromLocalStorage(props);
-
-        // Edit loaded data from local storage
-        if (!!this._afterLoadStorage) {
-          this._afterLoadStorage(this._json);
-        }
-      }
-
-      props.forEach((e) => {
-        this.observeProperty(e);
-      });
-    }
-  }
-
-  private _observedProperties: IReactionDisposer[] = [];
-  private observeProperty(key: string) {
-    if (!!key && key[0] === "_") return;
-    if (!this._observedProperties) this._observedProperties = [];
-    const prop = (this as any)[key];
-
-    if (prop instanceof Model) {
-      prop._addReaction(() => {
-        this.saveToLocalStorage(this._json);
-      });
-    } else {
-      this._observedProperties.push(
-        reaction(
-          () => (this as any)[key],
-          () => {
-            if (!this._parent) {
-              this.saveToLocalStorage(this._json);
-            } else {
-              this._reactions.forEach((e) => {
-                e();
-              });
-            }
-          }
-        )
-      );
-    }
-  }
-
-  private _reactions: (() => void)[] = [];
-  protected _addReaction(fun: () => void) {
-    if (!this._reactions) this._reactions = [];
-    this._reactions.push(fun);
-  }
-
-  public _destroy() {
-    this._observedProperties.forEach((e) => {
-      e();
+    makeObservable(this, obj, {
+      deep: true,
     });
 
-    for (let i in this) {
-      if (this[i] instanceof Model) {
-        (this[i] as any)._destroy();
-      }
+    if (!!this._options?.localStorage) {
+      // children model will be loaded from it's parent
+      // so, we load only the parent
+      // and it will extract it's value to it's children.
+      await this.loadFromLocalStorage();
     }
-  }
-
-  private async loadFromLocalStorage(props: string[]) {
-    let storeName = this._opt.storageName || this.constructor.name;
-
-    let data = await AsyncStorage.getItem(storeName);
-    let dataStr: any = !!data ? data : "{}";
-
-    try {
-      const content = JSON.parse(dataStr);
-      this._loadJSON(content);
-    } catch (e) {}
-  }
-
-  private saveToLocalStorage(obj: any) {
-    let storeName = this._opt.storageName || this.constructor.name;
-    let str = JSON.stringify(obj);
-    AsyncStorage.setItem(storeName, str);
   }
 
   get _json() {
@@ -222,8 +136,7 @@ export abstract class Model<M extends Model = any> {
             let res = self[i].map((x: any) => {
               if (x instanceof Model) {
                 x = x._json;
-              }
-              if (isObservable(x)) {
+              } else if (isObservable(x)) {
                 x = toJS(x);
               }
               return x;
@@ -240,14 +153,13 @@ export abstract class Model<M extends Model = any> {
     return result;
   }
 
-  _loadJSON(obj: any, mapping?: any) {
-    let value: Model<M> = obj;
+  _loadJSON(value: any, mapping?: any) {
     const except = Object.getOwnPropertyNames(Object.getPrototypeOf(this));
 
     const applyValue = (
       key: string,
       value: any,
-      processValue?: (value: any, a: any) => any
+      processValue?: (newValue: any, oldValue: any) => any
     ) => {
       if (typeof processValue === "function") {
         return processValue(value, (this as any)[key]);
@@ -255,12 +167,12 @@ export abstract class Model<M extends Model = any> {
       return value;
     };
 
-    let i: keyof Model<M>;
+    let i: any;
     try {
       for (i in value) {
-        let key: keyof Model<M> = i;
+        let key: keyof Model = i as any;
         let valueMeta: any = undefined;
-        if (except.indexOf(key) > -1) {
+        if (except.indexOf(key) > -1 || i.indexOf("_") === 0) {
           continue;
         }
 
@@ -274,16 +186,36 @@ export abstract class Model<M extends Model = any> {
             } else {
               key = mapping[i];
             }
-          } else if (this[i] === undefined) {
+          } else if ((this as any)[i] === undefined) {
             continue;
           }
         }
+
         if (typeof this[key] !== "object") {
           runInAction(() => {
             (this as any)[key] = applyValue(key, value[i], valueMeta);
           });
         } else {
-          if (this[key] instanceof Model) {
+          if (
+            this[key] instanceof Array &&
+            Array.isArray(this._arrClass[key])
+          ) {
+            valueMeta = (newVal: Array<any>, oldVal: Array<any>) => {
+              let model = this._arrClass[key][0];
+              let parent = this._arrClass[key][1];
+
+              return newVal.map((x) => {
+                let y = new model();
+                y._initMobx(y);
+                y._parent = parent;
+                y._loadJSON(x);
+                return y;
+              });
+            };
+            runInAction(() => {
+              (this as any)[key] = applyValue(key, value[i], valueMeta);
+            });
+          } else if (this[key] instanceof Model) {
             this[key]._loadJSON(applyValue(key, value[i], valueMeta));
           } else if (typeof value[i] !== "function") {
             runInAction(() => {
@@ -297,14 +229,33 @@ export abstract class Model<M extends Model = any> {
     }
     return this;
   }
+
+  private async loadFromLocalStorage() {
+    let storeName = this._options.storageName || this.constructor.name;
+
+    let data = await AsyncStorage.getItem(storeName);
+    let dataStr: any = !!data ? data : "{}";
+
+    try {
+      const content = JSON.parse(dataStr);
+      this._loadJSON(content);
+    } catch (e) {}
+  }
+
+  private saveToLocalStorage = debounce(
+    (obj) => {
+      let storeName = this._options.storageName || this.constructor.name;
+      let str = JSON.stringify(obj);
+      AsyncStorage.setItem(storeName, str);
+    },
+    500,
+    { trailing: true }
+  );
 }
 
 const getType = (obj: any) => {
   if (!!obj && typeof obj === "object") {
-    const c: any = obj.constructor;
-    if (c && c.__type) {
-      return c.__type;
-    }
+    return obj.constructor.name;
   }
   return undefined;
 };

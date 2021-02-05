@@ -1,17 +1,20 @@
 import { useTheme } from "@react-navigation/native";
-import { ITheme } from "../../config/theme";
 import { observer, useLocalObservable } from "mobx-react";
 import React from "react";
 import { StyleSheet, TextStyle, ViewStyle } from "react-native";
+import { ITheme } from "../../config/theme";
 import Button from "../Button";
 import Icon, { IIcon } from "../Icon";
 import Text from "../Text";
 import DateTimeView from "./DateTimeView";
 import { generateDate } from "./generator";
+import { IDateTimeView } from "./DateTimeView";
 
 export interface IDateTime {
   value?: string;
   format?: string;
+  minimumDate?: Date;
+  maximumDate?: Date;
   labelFormat?: string;
   type?: "date" | "time" | "datetime" | "monthly" | "yearly";
   display?: "default" | "spinner" | "calendar" | "clock";
@@ -23,7 +26,8 @@ export interface IDateTime {
     label?: TextStyle;
     wraper?: ViewStyle;
   };
-  iconProps?: IIcon;
+  iconProps?: Partial<IIcon>;
+  dateProps?: IDateTimeView;
 }
 
 export default observer((props: IDateTime) => {

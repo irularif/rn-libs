@@ -14,6 +14,8 @@ export const generateDate = (props: IDateTime, meta: any) => {
     display,
     iconProps,
     styles,
+    minimumDate,
+    maximumDate,
     onBlur,
     onChangeValue,
     onChange,
@@ -70,6 +72,8 @@ export const generateDate = (props: IDateTime, meta: any) => {
     mode: type,
     value: v,
     visible: meta.visible,
+    minimumDate,
+    maximumDate,
     onChange: handleChange,
     setVisible: switchCalendar,
   };

@@ -9,6 +9,7 @@ export const generateInput = (props: IField) => {
     label,
     editable,
     onChange,
+    onBlur,
   } = props;
   const setValue = (value: any) => {
     if (typeof initializeField?.onChangeValue === "function") {
@@ -21,6 +22,9 @@ export const generateInput = (props: IField) => {
   const setBlur = () => {
     if (typeof initializeField?.onBlur === "function") {
       initializeField.onBlur(path);
+    }
+    if (!!onBlur) {
+      onBlur();
     }
   };
   let value = "";
