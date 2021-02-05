@@ -11,7 +11,6 @@ export default (props: IFlatListProps) => {
   };
   const basecontentContainerStyle = {
     padding: 5,
-    paddingHorizontal: 15,
   };
   const cstyle = StyleSheet.flatten([baseStyle, style]);
   const ccontentContainerStyle = StyleSheet.flatten([

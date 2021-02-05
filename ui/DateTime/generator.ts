@@ -10,7 +10,7 @@ export const generateDate = (props: IDateTime, meta: any) => {
     value,
     format,
     labelFormat,
-    type,
+    type = "date",
     display,
     iconProps,
     styles,
@@ -28,22 +28,36 @@ export const generateDate = (props: IDateTime, meta: any) => {
     switch (type) {
       case "date":
         labelF = "dd MMMM yyyy";
-        dateF = "yyyy-MM-dd";
         break;
       case "time":
         labelF = "HH:mm";
-        dateF = "HH:mm:ss";
         break;
       case "datetime":
         labelF = "dd MMMM yyyy - HH:mm";
-        dateF = "yyyy-MM-dd HH:mm:ss";
         break;
       case "monthly":
         labelF = "MMMM yyyy";
-        dateF = "yyyy-MM";
         break;
       case "yearly":
         labelF = "yyyy";
+        break;
+    }
+  }
+  if (!dateF) {
+    switch (type) {
+      case "date":
+        dateF = "yyyy-MM-dd";
+        break;
+      case "time":
+        dateF = "HH:mm:ss";
+        break;
+      case "datetime":
+        dateF = "yyyy-MM-dd HH:mm:ss";
+        break;
+      case "monthly":
+        dateF = "yyyy-MM";
+        break;
+      case "yearly":
         dateF = "yyyy";
         break;
     }
