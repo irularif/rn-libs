@@ -27,6 +27,7 @@ export interface IField {
   initializeField?: IFormField;
   editable?: boolean;
   onChange?: (value: any) => void;
+  setValue?: (value: any) => any;
   onBlur?: () => void;
   Prefix?: ReactElement;
   Suffix?: ReactElement;

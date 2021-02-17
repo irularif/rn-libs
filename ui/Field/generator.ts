@@ -10,8 +10,13 @@ export const generateInput = (props: IField) => {
     editable,
     onChange,
     onBlur,
+    setValue: overideValue,
   } = props;
-  const setValue = (value: any) => {
+  const setValue = (v: any) => {
+    let value = v;
+    if (!!overideValue) {
+      value = overideValue(v);
+    }
     if (typeof initializeField?.onChangeValue === "function") {
       initializeField.onChangeValue(path, value);
     }

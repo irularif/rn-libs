@@ -31,7 +31,7 @@ export default observer((props: ITextInput) => {
     switch (type || originalType.current) {
       case "number":
         let b = text.replace(/[^0-9]/g, "");
-        v = b || "0";
+        v = b || "";
         break;
       case "decimal":
         let c = text.replace(/[^0-9]/g, "");
