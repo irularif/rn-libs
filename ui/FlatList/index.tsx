@@ -26,6 +26,7 @@ export default (props: IFlatListProps) => {
       style={cstyle}
       contentContainerStyle={ccontentContainerStyle}
       ref={props.flatListRef}
+      keyboardShouldPersistTaps="always"
     />
   );
 };

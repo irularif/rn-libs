@@ -236,6 +236,10 @@ export abstract class Model {
             if (!self[selfKey]._parent) {
               self[selfKey]._parent = self;
             }
+          } else {
+            runInAction(() => {
+              self[selfKey] = applyValue(selfKey, value[key], valueMeta);
+            });
           }
         }
       }

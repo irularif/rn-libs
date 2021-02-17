@@ -6,17 +6,21 @@ import React, { useEffect } from "react";
 import { StyleSheet, TextStyle } from "react-native";
 import TextInput from "../TextInput";
 import View from "../View";
+import Text from "../Text";
 
 export interface IOTP {
   length: number;
   value: any;
   onChange?: (value: string) => void;
+  validation?: (value: string) => string | undefined;
 }
 
 export default observer((props: IOTP) => {
-  const { value, onChange, length } = props;
+  const { value, onChange, length, validation } = props;
+  const Theme: ITheme = useTheme() as any;
   const meta = useLocalObservable(() => ({
     otp: Array(length).fill("") as any[],
+    errorMessage: "",
   }));
   const inputRef: any[] = [];
 
@@ -28,29 +32,58 @@ export default observer((props: IOTP) => {
       }
       runInAction(() => (meta.otp = otp));
     }
+    if (!!validation) {
+      let m: any = validation(value);
+      if (!!m) {
+        runInAction(() => (meta.errorMessage = m));
+      }
+    }
+  }, []);
+
+  return (
+    <>
+      <View
+        style={{
+          flexDirection: "row",
+        }}
+      >
+        <Input inputRef={inputRef} onChange={onChange} meta={meta} />
+      </View>
+      <Error meta={meta} validation={validation} value={value} />
+    </>
+  );
+});
+
+const Error = observer((props: any) => {
+  const Theme: ITheme = useTheme() as any;
+  const { meta, validation, value } = props;
+  if (!meta.errorMessage) return null;
+
+  useEffect(() => {
+    if (!!validation) {
+      let m: any = validation(value);
+      if (!!m) {
+        runInAction(() => (meta.errorMessage = m));
+      }
+    }
   }, [value]);
 
   return (
-    <View
+    <Text
       style={{
-        flexDirection: "row",
+        color: Theme.colors.notification,
+        fontSize: 13,
+        marginHorizontal: 5,
+        marginTop: 4,
       }}
     >
-      {meta.otp.map((_, key) => (
-        <Input
-          key={key}
-          index={key}
-          inputRef={inputRef}
-          onChange={onChange}
-          meta={meta}
-        />
-      ))}
-    </View>
+      {meta.errorMessage}
+    </Text>
   );
 });
 
 const Input = observer((props: any) => {
-  const { index: key, inputRef, onChange, meta } = props;
+  const { inputRef, onChange, meta } = props;
   const Theme: ITheme = useTheme() as any;
 
   let baseStyle: TextStyle = {
@@ -74,13 +107,21 @@ const Input = observer((props: any) => {
 
   const focusNext = (index: number, value: string) => {
     if (index < inputRef.length - 1 && value) {
-      inputRef[index + 1].focus();
+      if (value.length > 1 && index + 2 <= inputRef.length - 1) {
+        inputRef[index + 2].focus();
+      } else {
+        inputRef[index + 1].focus();
+      }
     }
     if (index === inputRef.length - 1) {
       inputRef[index].blur();
     }
     const otp = [...meta.otp];
     otp[index] = value;
+    const nvalue = otp.join("");
+    for (let i in otp) {
+      otp[i] = nvalue[i];
+    }
     runInAction(() => (meta.otp = otp));
     if (!!onChange) {
       onChange(otp.join(""));
@@ -89,25 +130,23 @@ const Input = observer((props: any) => {
 
   return (
     <>
-      <TextInput
-        key={key}
-        value={meta.otp[key]}
-        inputRef={(ref: any) => (inputRef[key] = ref)}
-        type="text"
-        keyboardType="number-pad"
-        onChangeValue={(v) => focusNext(key, v)}
-        onKeyPress={(e) => focusPrevious(e.nativeEvent.key, key)}
-        style={cstyleInput}
-        maxLength={1}
-      />
-      {key < meta.otp.length - 1 && (
-        <View
-          key={key + "a"}
-          style={{
-            width: 5,
-          }}
+      {meta.otp.map((_: any, key: number) => (
+        <TextInput
+          key={key}
+          value={meta.otp[key]}
+          inputRef={(ref: any) => (inputRef[key] = ref)}
+          type="text"
+          keyboardType="number-pad"
+          onChangeValue={(v) => focusNext(key, v)}
+          onKeyPress={(e) => focusPrevious(e.nativeEvent.key, key)}
+          style={StyleSheet.flatten([
+            cstyleInput,
+            {
+              marginRight: key < meta.otp.length - 1 ? 5 : 0,
+            },
+          ])}
         />
-      )}
+      ))}
     </>
   );
 });
