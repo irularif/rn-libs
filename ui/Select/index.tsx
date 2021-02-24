@@ -118,12 +118,14 @@ export default observer((props: ISelect) => {
 });
 
 const LabelSelect = observer((props: any) => {
-  const { label, switchSelect } = props;
+  const { label, switchSelect, styles, style } = props;
   const Theme: ITheme = useTheme() as any;
   const cStyle = StyleSheet.flatten([
     {
       paddingHorizontal: 0,
     },
+    style,
+    styles?.label,
   ]);
   const labelStyle = StyleSheet.flatten([
     {

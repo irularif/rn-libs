@@ -1,3 +1,4 @@
+import get from "lodash.get";
 import { IField } from ".";
 
 export const generateInput = (props: IField) => {
@@ -15,7 +16,10 @@ export const generateInput = (props: IField) => {
   const setValue = (v: any) => {
     let value = v;
     if (!!overideValue) {
-      value = overideValue(v);
+      let nv = overideValue(v);
+      if (!!nv) {
+        value = nv;
+      }
     }
     if (typeof initializeField?.onChangeValue === "function") {
       initializeField.onChangeValue(path, value);
@@ -33,8 +37,8 @@ export const generateInput = (props: IField) => {
     }
   };
   let value = "";
-  if (!!initializeField?.values && !!initializeField?.values[path]) {
-    value = initializeField.values[path];
+  if (!!initializeField?.values && !!get(initializeField.values, path, "")) {
+    value = get(initializeField.values, path, "");
   }
   if (!!ovValue) {
     value = ovValue;

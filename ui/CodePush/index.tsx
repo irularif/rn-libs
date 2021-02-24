@@ -32,7 +32,7 @@ const Main = (props: ICodePush) => {
             setSyncMessage("Checking for update...");
             break;
           case codePush.SyncStatus.DOWNLOADING_PACKAGE:
-            setSyncMessage("Downloading package...");
+            setSyncMessage("Downloading update...");
             break;
           case codePush.SyncStatus.AWAITING_USER_ACTION:
             setSyncMessage("Awaiting user action...");

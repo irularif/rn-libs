@@ -21,7 +21,7 @@ export const generateDate = (props: IDateTime, meta: any) => {
     onChange,
   } = props;
 
-  const v = !!value && typeof value === "string" ? new Date(value) : new Date();
+  const v = !!value && typeof value === "string" ? new Date(value) : "";
   let labelF = labelFormat;
   let dateF = format;
   if (!labelF) {
@@ -63,7 +63,7 @@ export const generateDate = (props: IDateTime, meta: any) => {
     }
   }
 
-  const label = dateFormat(v, labelF) || labelF;
+  const label = !!v ? dateFormat(v, labelF) : dateF;
 
   const handleChange = (ev: any, date: Date) => {
     if (!!onChangeValue) {

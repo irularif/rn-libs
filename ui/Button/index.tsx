@@ -27,14 +27,7 @@ export interface IButtonProps extends TouchableOpacityProps {
 }
 
 export default (props: IButtonProps) => {
-  const {
-    disabled,
-    shadow,
-    style,
-    mode = "contained",
-    children,
-    label,
-  } = props;
+  const { disabled, shadow, mode = "contained", children, label } = props;
   const Theme: ITheme = useTheme() as any;
   const cprops = { ...props };
   delete cprops.styles;

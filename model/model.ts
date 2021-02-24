@@ -212,6 +212,8 @@ export abstract class Model {
                 let model = this._arrClass[selfKey][0];
                 let parent = this._arrClass[selfKey][1];
 
+                if (selfKey == "dataBerkas") console.log(selfKey, newVal);
+
                 return newVal.map((item) => {
                   let newItem = model.create();
                   newItem._parent = parent;

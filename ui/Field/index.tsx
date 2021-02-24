@@ -19,8 +19,9 @@ export interface IField {
   children: ReactElement;
   style?: ViewStyle;
   styles?: {
+    fieldGroup?: ViewStyle;
     field?: ViewStyle;
-    inputWrapper?: ViewStyle;
+    input?: ViewStyle;
     label?: TextStyle;
     errorMessage?: TextStyle;
   };
@@ -77,18 +78,19 @@ export default observer((props: IField) => {
   }
 
   // Styles
-  const cstyleInputWraper = StyleSheet.flatten([
+  const cstyleInput = StyleSheet.flatten([
     baseStyle,
     Theme.styles.field,
-    styles?.inputWrapper,
+    styles?.input,
   ]);
   const cstyle = StyleSheet.flatten([
     {
       marginBottom: 20,
     },
-    styles?.field,
+    styles?.fieldGroup,
     style,
   ]);
+  const fstyle = StyleSheet.flatten([styles?.field]);
   const cstyleLabel = StyleSheet.flatten([
     {
       color: Theme.colors.text,
@@ -102,16 +104,18 @@ export default observer((props: IField) => {
 
   return (
     <View style={cstyle}>
-      {hiddenLabel != true &&
-        (typeof label === "string" ? (
-          <Text style={cstyleLabel}>{label}</Text>
-        ) : (
-          label
-        ))}
-      <View style={cstyleInputWraper}>
-        {Prefix}
-        {Input}
-        {Suffix}
+      <View style={fstyle}>
+        {hiddenLabel != true &&
+          (typeof label === "string" ? (
+            <Text style={cstyleLabel}>{label}</Text>
+          ) : (
+            label
+          ))}
+        <View style={cstyleInput}>
+          {Prefix}
+          {Input}
+          {Suffix}
+        </View>
       </View>
       {Info}
       <ErrorMessage {...props} />

@@ -57,7 +57,6 @@ export default observer((props: IOTP) => {
 const Error = observer((props: any) => {
   const Theme: ITheme = useTheme() as any;
   const { meta, validation, value } = props;
-  if (!meta.errorMessage) return null;
 
   useEffect(() => {
     if (!!validation) {
@@ -67,6 +66,8 @@ const Error = observer((props: any) => {
       }
     }
   }, [value]);
+
+  if (!meta.errorMessage) return null;
 
   return (
     <Text

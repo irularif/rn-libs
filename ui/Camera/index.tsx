@@ -66,7 +66,7 @@ const Preview = observer((props: any) => {
   const Theme: ITheme = useTheme() as any;
 
   if (!!renderPreview) {
-    return renderPreview(source);
+    return renderPreview(props);
   }
 
   if (!!source) {

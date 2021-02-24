@@ -1,4 +1,4 @@
-import { useTheme } from "@react-navigation/native";
+import { useIsFocused, useTheme } from "@react-navigation/native";
 import Fonts from "../../assets/fonts";
 import { ITheme } from "../../config/theme";
 import get from "lodash.get";
@@ -40,11 +40,11 @@ export interface IFromProps {
   values?: any;
   validationSchema?: ObjectShape;
   validation?: (values: any) => IError;
-  children: (props: IField) => void;
+  children: (props: IField) => ReactElement;
   onChange?: (path: string, value: any) => void;
   onSubmit?: (values: any, canSubmit?: boolean) => void;
   onError?: (fields: IError) => void;
-  Submit?: (handleSubmit: any, canSubmit?: boolean) => ReactElement;
+  Submit?: (handleSubmit: any, canSubmit?: boolean) => ReactElement | null;
   hiddenSubmit?: boolean;
 }
 
@@ -65,6 +65,7 @@ export default observer((props: IFromProps) => {
     touched: {} as any,
     canSubmit: false,
   }));
+  const isFocused = useIsFocused();
 
   const setBlur = (path: string) => {
     if (!meta.touched[path]) {
@@ -132,8 +133,10 @@ export default observer((props: IFromProps) => {
   };
 
   useEffect(() => {
-    validate();
-  }, []);
+    if (!!isFocused) {
+      validate();
+    }
+  }, [isFocused]);
 
   return (
     <>
@@ -151,34 +154,36 @@ export default observer((props: IFromProps) => {
 const RenderSubmit = observer((props: any) => {
   const { Submit, handleSubmit, meta, hiddenSubmit } = props;
   const { colors }: ITheme = useTheme() as any;
-  return (
-    <>
-      {!!Submit
-        ? Submit(handleSubmit, meta.canSubmit)
-        : !hiddenSubmit && (
-            <Button
-              style={{
-                margin: 0,
-                marginTop: 15,
-                paddingVertical: 12,
-              }}
-              onPress={handleSubmit}
-              disabled={meta.canSubmit}
-            >
-              <Text
-                style={{
-                  color: colors.textLight,
-                  fontSize: 16,
-                  fontFamily: Fonts.Roboto,
-                  fontWeight: "bold",
-                }}
-              >
-                SAVE
-              </Text>
-            </Button>
-          )}
-    </>
-  );
+  if (!!Submit) {
+    return Submit(handleSubmit, meta.canSubmit);
+  }
+
+  if (!hiddenSubmit) {
+    return (
+      <Button
+        style={{
+          margin: 0,
+          marginTop: 15,
+          paddingVertical: 12,
+        }}
+        onPress={handleSubmit}
+        disabled={meta.canSubmit}
+      >
+        <Text
+          style={{
+            color: colors.textLight,
+            fontSize: 16,
+            fontFamily: Fonts.Roboto,
+            fontWeight: "bold",
+          }}
+        >
+          SAVE
+        </Text>
+      </Button>
+    );
+  }
+
+  return null;
 });
 
 const prepareDataForValidation = (values: any) => {
