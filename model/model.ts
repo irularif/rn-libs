@@ -162,13 +162,14 @@ export abstract class Model {
 
     const applyValue = (
       selfKey: string,
-      value: any,
-      processValue?: (newValue: any, oldValue: any) => any
+      newValue: any,
+      oldValue: any,
+      processValue?: (newValue: any, oldValue: any, key?: string) => any
     ) => {
       if (!!processValue && typeof processValue === "function") {
-        return processValue(value, self[selfKey]);
+        return processValue(newValue, oldValue, selfKey);
       }
-      return value;
+      return parseValue(oldValue, newValue);
     };
 
     try {
@@ -203,7 +204,12 @@ export abstract class Model {
 
         if (typeof self[selfKey] !== "object") {
           runInAction(() => {
-            self[selfKey] = applyValue(selfKey, value[key], valueMeta);
+            self[selfKey] = applyValue(
+              selfKey,
+              value[key],
+              self[selfKey],
+              valueMeta
+            );
           });
         } else {
           if (self[selfKey] instanceof Array) {
@@ -229,18 +235,25 @@ export abstract class Model {
             if (!!value[key] && !!self[selfKey].replace) {
               runInAction(() =>
                 self[selfKey].replace(
-                  applyValue(selfKey, value[key], valueMeta)
+                  applyValue(selfKey, value[key], self[selfKey], valueMeta)
                 )
               );
             }
           } else if (self[selfKey] instanceof Model) {
-            self[selfKey]._loadJSON(applyValue(selfKey, value[key], valueMeta));
+            self[selfKey]._loadJSON(
+              applyValue(selfKey, value[key], self[selfKey], valueMeta)
+            );
             if (!self[selfKey]._parent) {
               self[selfKey]._parent = self;
             }
           } else {
             runInAction(() => {
-              self[selfKey] = applyValue(selfKey, value[key], valueMeta);
+              self[selfKey] = applyValue(
+                selfKey,
+                value[key],
+                self[selfKey],
+                valueMeta
+              );
             });
           }
         }
@@ -308,4 +321,25 @@ const getType = (obj: any) => {
     }
   }
   return undefined;
+};
+
+const parseValue = (oval: any, nval: any) => {
+  if (oval !== null && oval !== undefined) {
+    switch (typeof oval) {
+      case "number":
+        return Number(nval);
+      case "boolean":
+        return Boolean(nval);
+      case "string":
+        if (typeof nval === "object") return JSON.stringify(nval);
+        return !!nval ? String(nval) : nval;
+      case "object":
+        if (typeof nval === "string") return JSON.parse(nval);
+        return nval;
+      default:
+        return nval;
+    }
+  } else {
+    return nval;
+  }
 };
