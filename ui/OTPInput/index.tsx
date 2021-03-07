@@ -31,6 +31,12 @@ export default observer((props: IOTP) => {
         otp[i] = value[i];
       }
       runInAction(() => (meta.otp = otp));
+    } else {
+      const otp = [...meta.otp];
+      for (let i in otp) {
+        otp[i] = "";
+      }
+      runInAction(() => (meta.otp = otp));
     }
     if (!!validation) {
       let m: any = validation(value);
@@ -38,7 +44,7 @@ export default observer((props: IOTP) => {
         runInAction(() => (meta.errorMessage = m));
       }
     }
-  }, []);
+  }, [value]);
 
   return (
     <>

@@ -11,7 +11,7 @@ import {
 } from "mobx";
 import * as JSLZString from "lz-string";
 import AsyncStorage from "@react-native-async-storage/async-storage";
-import { decrypt, encrypt, generateKey } from "libs/utils/encrypt-aes";
+import { decrypt, encrypt, generateKey } from "../utils/encrypt-aes";
 
 export interface ModelOptions {
   localStorage?: boolean;
@@ -217,8 +217,6 @@ export abstract class Model {
               valueMeta = (newVal: Array<any>, _: any) => {
                 let model = this._arrClass[selfKey][0];
                 let parent = this._arrClass[selfKey][1];
-
-                if (selfKey == "dataBerkas") console.log(selfKey, newVal);
 
                 return newVal.map((item) => {
                   let newItem = model.create();
