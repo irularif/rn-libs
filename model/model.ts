@@ -324,22 +324,22 @@ const getType = (obj: any) => {
 };
 
 const parseValue = (oval: any, nval: any) => {
-  if (oval !== null && oval !== undefined) {
+  if (!!oval) {
     switch (typeof oval) {
       case "number":
         return Number(nval);
       case "boolean":
         return Boolean(nval);
       case "string":
-        if (typeof nval === "object") return JSON.stringify(nval);
+        if (!!nval && typeof nval === "object") return JSON.stringify(nval);
         return !!nval ? String(nval) : nval;
       case "object":
-        if (typeof nval === "string") return JSON.parse(nval);
+        if (!!nval && typeof nval === "string") return JSON.parse(nval);
         return nval;
       default:
         return nval;
     }
   } else {
-    return nval;
+    return !!nval ? nval : oval;
   }
 };
