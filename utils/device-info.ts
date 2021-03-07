@@ -1,6 +1,47 @@
 import DeviceInfo from "react-native-device-info";
 
-const DeviceInformation = async () => {
+export interface IDeviceInformation {
+  apiLevel: number;
+  baseOS: string;
+  brand: string;
+  buildNumber: string;
+  bundleId: string;
+  device: string;
+  deviceName: string;
+  deviceToken: string;
+  fontScale: number;
+  diskStorage: number;
+  diskStorageOld: number;
+  hardware: number;
+  manufacturer: string;
+  macAddress: string;
+  installerPackageName: string;
+  ipAddress: string;
+  lastUpdateTime: number;
+  maxMemory: number;
+  product: string;
+  readableVersion: string;
+  systemName: string;
+  systemVersion: string;
+  buildId: string;
+  totalDiskCapacity: number;
+  totalDiskCapacityOld: number;
+  totalMemory: number;
+  uniqueId: string;
+  syncUniqueId: string;
+  usedMemory: number;
+  userAgent: string;
+  version: string;
+  isAirplaneMode: boolean;
+  isBatteryCharging: boolean;
+  isEmulator: boolean;
+  isTablet: boolean;
+  isLandscape: boolean;
+  hasNotch: boolean;
+  deviceType: string;
+}
+
+const DeviceInformation = async (): Promise<IDeviceInformation> => {
   return {
     apiLevel: await DeviceInfo.getApiLevel(),
     baseOS: await DeviceInfo.getBaseOs(),
