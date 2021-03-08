@@ -1,6 +1,6 @@
 import DeviceInformation, { IDeviceInformation } from "libs/utils/device-info";
 import { useState } from "react";
-import useAsyncEffect from "../utils/use-async-effect";
+import useAsyncEffect from "./useAsyncEffect";
 
 export default () => {
   const [deviceInfo, setDeviceInfo] = useState({});
