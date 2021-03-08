@@ -61,6 +61,7 @@ export default observer((props: ITextInput) => {
       paddingVertical: 8,
       fontSize: Theme.fontSize.h6,
       fontFamily: Theme.fontStyle.regular,
+      paddingHorizontal: 10,
     },
     {
       opacity: editable !== false ? 1 : 0.7,

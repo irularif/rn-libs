@@ -37,6 +37,7 @@ export interface ITheme {
   shadow: any;
   statusBar: StatusBarProps;
   styles: {
+    fieldGroup?: ViewStyle;
     field?: ViewStyle;
     input?: TextStyle;
     button?: ViewStyle;
@@ -90,6 +91,7 @@ export const DefaultTheme: ITheme = Object.assign(
       boldItalic: Fonts.RobotoBoldItalic,
     },
     styles: StyleSheet.create({
+      fieldGroup: {},
       field: {},
       input: {},
       button: {},

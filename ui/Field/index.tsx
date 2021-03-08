@@ -57,15 +57,21 @@ export default observer((props: IField) => {
     backgroundColor:
       editable === false ? Theme.colors.background : Theme.colors.card,
     alignItems: "center",
-    paddingHorizontal: 5,
     borderRadius: 4,
+    flexGrow: 1,
+    flexShrink: 1,
   };
+  let removedBgInput = {};
   switch (Input.type) {
     case Checkbox:
     case ChoiceGroup:
       baseStyle = {
         ...baseStyle,
         borderWidth: 0,
+        paddingHorizontal: 0,
+        backgroundColor: "transparent",
+      };
+      removedBgInput = {
         backgroundColor: "transparent",
       };
       break;
@@ -78,23 +84,30 @@ export default observer((props: IField) => {
   }
 
   // Styles
-  const cstyleInput = StyleSheet.flatten([
-    baseStyle,
-    Theme.styles.field,
-    styles?.input,
-  ]);
   const cstyle = StyleSheet.flatten([
     {
-      marginBottom: 20,
+      marginBottom: 15,
+      flexShrink: 1,
     },
+    Theme.styles.fieldGroup,
     styles?.fieldGroup,
     style,
   ]);
-  const fstyle = StyleSheet.flatten([styles?.field]);
+  const fstyle = StyleSheet.flatten([
+    { flexShrink: 1 },
+    Theme.styles.field,
+    styles?.field,
+  ]);
+  const cstyleInput = StyleSheet.flatten([
+    baseStyle,
+    Theme.styles.input,
+    removedBgInput,
+    styles?.input,
+  ]);
   const cstyleLabel = StyleSheet.flatten([
     {
       color: Theme.colors.text,
-      marginBottom: 8,
+      marginBottom: 5,
       marginHorizontal: 5,
       fontSize: Theme.fontSize.h6,
       fontFamily: Theme.fontStyle.bold,
