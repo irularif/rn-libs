@@ -1,4 +1,4 @@
-import { observer } from "mobx-react";
+import { observer, useLocalObservable } from "mobx-react";
 import React from "react";
 import * as DocumentPicker from "expo-document-picker";
 import { ViewStyle } from "react-native";
@@ -23,8 +23,8 @@ export default observer((props: IDocumentPicker) => {
     handlePress,
     label,
     style,
-    value,
     clearSource,
+    value,
   } = generateDocumentPicker(props);
   const Theme: ITheme = useTheme() as any;
 

@@ -1,7 +1,6 @@
-import documentPicker from "../../utils/document-picker";
 import { StyleSheet, ViewStyle } from "react-native";
 import { IDocumentPicker } from ".";
-import mime from "mime-types";
+import documentPicker from "../../utils/document-picker";
 
 export const generateDocumentPicker = (props: IDocumentPicker) => {
   const { onChange, onChangeValue, onBlur, style, placeholder, value } = props;

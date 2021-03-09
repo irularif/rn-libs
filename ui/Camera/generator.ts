@@ -148,7 +148,7 @@ export const generateCameraView = (
     if (meta.tempURI !== source && typeof source === "string") {
       runInAction(() => (meta.tempURI = source));
     }
-  }, []);
+  }, [source]);
 
   return {
     width,
