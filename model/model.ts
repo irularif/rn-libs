@@ -321,23 +321,28 @@ const getType = (obj: any) => {
   return undefined;
 };
 
+const isNull = (val: any) => {
+  return val === null || val === undefined;
+};
+
 const parseValue = (oval: any, nval: any) => {
-  if (!!oval) {
+  if (!isNull(oval)) {
     switch (typeof oval) {
       case "number":
-        return Number(nval);
+        return !isNull(nval) ? Number(nval) : nval;
       case "boolean":
-        return Boolean(nval);
+        return !isNull(nval) ? Boolean(nval) : nval;
       case "string":
-        if (!!nval && typeof nval === "object") return JSON.stringify(nval);
+        if (!isNull(nval) && typeof nval === "object")
+          return JSON.stringify(nval);
         return !!nval ? String(nval) : nval;
       case "object":
-        if (!!nval && typeof nval === "string") return JSON.parse(nval);
+        if (!isNull(nval) && typeof nval === "string") return JSON.parse(nval);
         return nval;
       default:
         return nval;
     }
   } else {
-    return !!nval ? nval : oval;
+    return !isNull(nval) ? nval : oval;
   }
 };
