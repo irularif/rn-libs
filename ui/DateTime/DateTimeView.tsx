@@ -1,15 +1,12 @@
 import RNDateTimePicker, {
   AndroidNativeProps,
   IOSNativeProps,
-  WindowsNativeProps,
 } from "@react-native-community/datetimepicker";
 import { observer, useLocalObservable } from "mobx-react";
 import React from "react";
 import { generateDateView } from "./generator";
 
-export type IDateTimeView = Partial<
-  IOSNativeProps | AndroidNativeProps | WindowsNativeProps
-> & {
+export type IDateTimeView = Partial<IOSNativeProps | AndroidNativeProps> & {
   visible: boolean;
   setVisible: (visible: boolean) => void;
   value: Date;
@@ -21,7 +18,7 @@ export default observer((props: IDateTimeView) => {
   const { visible } = props;
   const meta = useLocalObservable(() => ({
     mode: "date",
-    tempValue: null,
+    tempValue: new Date(),
   }));
 
   const cprops: any = generateDateView(props, meta);

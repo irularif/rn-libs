@@ -109,7 +109,7 @@ export const generateDateView = (props: IDateTimeView, meta: any) => {
       if (ev.type === "dismissed") {
         setVisible(!meta.visible);
         runInAction(() => {
-          meta.tempValue = value;
+          if (!!value) meta.tempValue = value;
           if (meta.mode === "time") {
             meta.mode = mode === "datetime" ? "date" : mode;
           }
@@ -161,7 +161,7 @@ export const generateDateView = (props: IDateTimeView, meta: any) => {
 
   useEffect(() => {
     runInAction(() => {
-      if (meta.tempValue !== value) {
+      if (meta.tempValue !== value && !!value) {
         meta.tempValue = value;
       }
       let m = mode;

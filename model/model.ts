@@ -335,7 +335,7 @@ const parseValue = (oval: any, nval: any) => {
       case "string":
         if (!isNull(nval) && typeof nval === "object")
           return JSON.stringify(nval);
-        return !!nval ? String(nval) : nval;
+        return !isNull(nval) ? String(nval) : nval;
       case "object":
         if (!isNull(nval) && typeof nval === "string") return JSON.parse(nval);
         return nval;
