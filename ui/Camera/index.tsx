@@ -69,7 +69,7 @@ const Preview = observer((props: any) => {
     return renderPreview(props);
   }
 
-  if (!!source) {
+  if (!!source?.uri) {
     const cstyle = StyleSheet.flatten([
       {
         height: 150,
