@@ -30,7 +30,12 @@ export default observer((props: IImage) => {
   };
   const cstyle = StyleSheet.flatten([buttonStyle, styles?.root]);
 
-  if (!props.source && !(props.source as any).uri) return null;
+  if (
+    !props.source &&
+    typeof props.source === "object" &&
+    !(props.source as any).uri
+  )
+    return null;
 
   return (
     <>

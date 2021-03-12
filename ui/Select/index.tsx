@@ -1,7 +1,7 @@
-import { useTheme } from "@react-navigation/native";
+import { useIsFocused, useTheme } from "@react-navigation/native";
 import { ITheme } from "../../config/theme";
 import { observer, useLocalObservable } from "mobx-react";
-import React, { ReactElement } from "react";
+import React, { ReactElement, useEffect, useRef, useState } from "react";
 import { StyleSheet, Text, TextStyle, ViewStyle } from "react-native";
 import Button from "../Button";
 import Field from "../Field";
@@ -91,6 +91,9 @@ export default observer((props: ISelect) => {
               marginBottom: 0,
               marginRight: 10,
             }}
+            styles={{
+              input: Theme.styles?.input,
+            }}
             Suffix={
               <Button
                 style={{
@@ -122,7 +125,7 @@ const LabelSelect = observer((props: any) => {
   const Theme: ITheme = useTheme() as any;
   const cStyle = StyleSheet.flatten([
     {
-      paddingHorizontal: 0,
+      paddingHorizontal: 10,
     },
     style,
     styles?.label,
@@ -142,16 +145,30 @@ const LabelSelect = observer((props: any) => {
 });
 
 const SelectView = observer((props: any) => {
-  const { items, onFilter, manualSearch } = props;
+  const { items, onFilter, manualSearch, meta, selected } = props;
+  const [index, setIndex] = useState(0);
+  const isFocused = useIsFocused();
   const cprops = props;
   const Theme: ITheme = useTheme() as any;
   let citems: any[] = items;
   if (!manualSearch) {
     citems = items.filter(onFilter);
   }
+  const ref = useRef(null as any);
+
+  useEffect(() => {
+    if (!!isFocused && !meta.search && selected) {
+      const idx = citems.findIndex((x) => x === selected);
+      if (idx > -1) {
+        setIndex(idx);
+        ref.current?.scrollToIndex({ index: idx });
+      }
+    }
+  }, [isFocused]);
 
   return (
     <FlatList
+      flatListRef={ref}
       data={citems}
       keyExtractor={(_, index: number) => String(index)}
       renderItem={(state) => <RenderItem cprops={cprops} {...state} />}
@@ -163,6 +180,13 @@ const SelectView = observer((props: any) => {
           }}
         />
       )}
+      onScrollToIndexFailed={(error) => {
+        setTimeout(() => {
+          if (citems.length !== 0 && ref.current !== null) {
+            ref.current?.scrollToIndex({ index: error.index, animated: true });
+          }
+        }, 10);
+      }}
     />
   );
 });

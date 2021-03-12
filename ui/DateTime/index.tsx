@@ -50,7 +50,7 @@ const DateLabel = observer((props: any) => {
   const Theme: ITheme = useTheme() as any;
   const cstyle = StyleSheet.flatten([
     {
-      paddingHorizontal: 0,
+      paddingHorizontal: 5,
     },
     styles?.wraper,
   ]);
