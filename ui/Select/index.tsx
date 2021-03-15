@@ -55,8 +55,10 @@ export interface ISelect extends IViewProps {
   style?: ViewStyle;
   styles?: {
     label?: TextStyle;
+    labelWrapper?: ViewStyle;
     choiceWrapper?: ViewStyle;
     item?: ViewStyle;
+    icon?: TextStyle;
   };
 }
 
@@ -128,18 +130,23 @@ const LabelSelect = observer((props: any) => {
       paddingHorizontal: 10,
     },
     style,
-    styles?.label,
+    styles?.labelWrapper,
   ]);
   const labelStyle = StyleSheet.flatten([
     {
       flex: 1,
     },
+    styles?.label,
   ]);
 
   return (
     <Button mode="clean" onPress={switchSelect} style={cStyle}>
       <Text style={labelStyle}>{label}</Text>
-      <Icon name="ios-arrow-down" color={Theme.colors.text} />
+      <Icon
+        name="ios-arrow-down"
+        color={Theme.colors.text}
+        style={styles?.icon}
+      />
     </Button>
   );
 });

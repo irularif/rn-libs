@@ -117,11 +117,11 @@ export const generateDateView = (props: IDateTimeView, meta: any) => {
       } else {
         if (mode === "datetime") {
           if (meta.mode === "time") {
+            setVisible(!meta.visible);
             runInAction(() => {
               meta.tempValue = date;
               meta.mode = "date";
             });
-            setVisible(!meta.visible);
             if (!!onChange) {
               onChange(ev, date);
             }
@@ -170,7 +170,7 @@ export const generateDateView = (props: IDateTimeView, meta: any) => {
       }
       meta.mode = m;
     });
-  }, [mode]);
+  }, []);
 
   return {
     ...props,
