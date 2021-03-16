@@ -10,6 +10,7 @@ import { IField as IFormField } from "../Form";
 import Text from "../Text";
 import View from "../View";
 import { generateInput } from "./generator";
+import { get } from "lodash";
 
 export interface IField {
   label: string | ReactElement;
@@ -155,10 +156,10 @@ const ErrorMessage = observer((props: Partial<IField>) => {
     !!path &&
     !!meta?.touched &&
     !!meta?.errors &&
-    !!meta?.touched[path] &&
-    !!meta?.errors[path]
+    !!get(meta?.touched, path) &&
+    !!get(meta?.errors, path)
   ) {
-    return <Text style={cstyle}>{meta.errors[path]}</Text>;
+    return <Text style={cstyle}>{get(meta?.errors, path)}</Text>;
   }
   return null;
 });

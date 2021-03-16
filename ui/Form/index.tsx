@@ -106,7 +106,13 @@ export default observer((props: IFromProps) => {
   const validate = async () => {
     let err = {};
     if (!!validationSchema) {
-      const validateData = prepareDataForValidation(values);
+      let v = values;
+      try {
+        v = values._json;
+      } catch (error) {
+        console.log(error);
+      }
+      const validateData = prepareDataForValidation(v);
       await Yup.object()
         .shape(validationSchema)
         .validate(validateData, {
