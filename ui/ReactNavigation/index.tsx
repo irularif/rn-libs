@@ -9,15 +9,19 @@ interface IAppProvider {
   routes: IRoute[];
   initialStack: TStackProps;
   mode?: "default" | "dark";
+  refReactNavigation?: any;
 }
 
 const Stack = createStackNavigator();
 
 export default observer((props: IAppProvider) => {
-  const { routes, initialStack, mode } = props;
+  const { routes, initialStack, mode, refReactNavigation } = props;
 
   return (
-    <NavigationContainer theme={mode === "dark" ? DarkTheme : DefaultTheme}>
+    <NavigationContainer
+      theme={mode === "dark" ? DarkTheme : DefaultTheme}
+      ref={refReactNavigation}
+    >
       <Stack.Navigator headerMode="none" {...initialStack}>
         {routes.map(
           (route: IRoute) =>
