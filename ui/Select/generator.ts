@@ -16,6 +16,7 @@ export const generateSelect = (props: ISelect, meta: any): ICSelect => {
     renderItem,
     onChangeValue,
     onChange,
+    onBlur,
   } = props;
 
   const getSelected = (item: any) => {
@@ -56,6 +57,7 @@ export const generateSelect = (props: ISelect, meta: any): ICSelect => {
 
   const switchSelect = () => {
     runInAction(() => (meta.visible = !meta.visible));
+    if (!!onBlur) onBlur();
   };
 
   const setSearch = (value: string) => {
