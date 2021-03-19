@@ -89,6 +89,7 @@ export default observer((props: ITextInput) => {
       ComponentProps = {
         keyboardType: "number-pad",
         ...ComponentProps,
+        value: ComponentProps.value.toString(),
       };
       break;
     case "multiline":
@@ -106,12 +107,12 @@ export default observer((props: ITextInput) => {
       break;
     case "currency":
       ComponentProps = {
+        ...ComponentProps,
         value: ComponentProps.value
           .toString()
           .replace(/,/g, "")
           .replace(/\B(?=(\d{3})+(?!\d))/g, ","),
         keyboardType: "number-pad",
-        ...ComponentProps,
       };
       break;
     case "email":

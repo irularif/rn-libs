@@ -36,11 +36,14 @@ export const generateInput = (props: IField) => {
       onBlur();
     }
   };
-  let value = "";
-  if (!!initializeField?.values && !!get(initializeField.values, path, "")) {
+  let value: any = "";
+  if (
+    !!initializeField?.values &&
+    !isNull(get(initializeField.values, path, ""))
+  ) {
     value = get(initializeField.values, path, "");
   }
-  if (!!ovValue) {
+  if (!isNull(ovValue)) {
     value = ovValue;
   }
   const Input = { ...children };
@@ -54,6 +57,9 @@ export const generateInput = (props: IField) => {
   };
 
   Input.props = inputProps;
-
   return Input;
+};
+
+const isNull = (val: any) => {
+  return val === null || val === undefined;
 };

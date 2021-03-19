@@ -24,6 +24,5 @@ export default observer((props: IDateTimeView) => {
   const cprops: any = generateDateView(props, meta);
 
   if (!visible) return null;
-
   return <RNDateTimePicker {...cprops} />;
 });

@@ -1,6 +1,6 @@
 import * as IconSource from "@expo/vector-icons";
 import React from "react";
-import { ViewStyle } from "react-native";
+import { TextStyle } from "react-native";
 
 export interface IIcon {
   source?:
@@ -21,7 +21,7 @@ export interface IIcon {
   name: string;
   size?: number;
   color?: string;
-  style?: ViewStyle;
+  style?: TextStyle;
 }
 export default (props: IIcon) => {
   const { source, style, size } = props;

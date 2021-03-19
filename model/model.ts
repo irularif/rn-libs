@@ -103,6 +103,7 @@ export abstract class Model {
 
     makeObservable(self, obj, {
       deep: false,
+      autoBind: true,
     });
 
     if (!!self._options?.localStorage) {
@@ -310,15 +311,15 @@ export abstract class Model {
   );
 }
 
-const getType = (obj: any) => {
-  if (!!obj && typeof obj === "object") {
-    if (obj instanceof Model) {
+const getType = (val: any) => {
+  if (!!val && typeof val === "object") {
+    if (val instanceof Model) {
       return "Model";
-    } else if (obj instanceof ArrayModel) {
+    } else if (val instanceof ArrayModel) {
       return "ArrayModel";
     }
   }
-  return undefined;
+  return typeof val;
 };
 
 const isNull = (val: any) => {

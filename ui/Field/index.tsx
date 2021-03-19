@@ -10,6 +10,7 @@ import { IField as IFormField } from "../Form";
 import Text from "../Text";
 import View from "../View";
 import { generateInput } from "./generator";
+import { get } from "lodash";
 
 export interface IField {
   label: string | ReactElement;
@@ -69,6 +70,7 @@ export default observer((props: IField) => {
         borderWidth: 0,
         paddingHorizontal: 0,
         backgroundColor: "transparent",
+        flexGrow: 0,
       };
       removedBgInput = {
         backgroundColor: "transparent",
@@ -88,18 +90,18 @@ export default observer((props: IField) => {
       marginBottom: 15,
       flexShrink: 1,
     },
-    Theme.styles.fieldGroup,
+    Theme.styles?.fieldGroup,
     styles?.fieldGroup,
     style,
   ]);
   const fstyle = StyleSheet.flatten([
     { flexShrink: 1 },
-    Theme.styles.field,
+    Theme.styles?.field,
     styles?.field,
   ]);
   const cstyleInput = StyleSheet.flatten([
     baseStyle,
-    Theme.styles.input,
+    Theme.styles?.input,
     removedBgInput,
     styles?.input,
   ]);
@@ -108,8 +110,8 @@ export default observer((props: IField) => {
       color: Theme.colors.text,
       marginBottom: 5,
       marginHorizontal: 5,
-      fontSize: Theme.fontSize.h6,
-      fontFamily: Theme.fontStyle.bold,
+      fontSize: Theme.fontSize?.h6,
+      fontFamily: Theme.fontStyle?.bold,
     },
     styles?.label,
   ]);
@@ -153,10 +155,10 @@ const ErrorMessage = observer((props: Partial<IField>) => {
     !!path &&
     !!meta?.touched &&
     !!meta?.errors &&
-    !!meta?.touched[path] &&
-    !!meta?.errors[path]
+    !!get(meta?.touched, path) &&
+    !!get(meta?.errors, path)
   ) {
-    return <Text style={cstyle}>{meta.errors[path]}</Text>;
+    return <Text style={cstyle}>{get(meta?.errors, path)}</Text>;
   }
   return null;
 });

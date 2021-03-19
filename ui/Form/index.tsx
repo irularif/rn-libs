@@ -1,14 +1,21 @@
 import { useIsFocused, useTheme } from "@react-navigation/native";
-import Fonts from "../../assets/fonts";
-import { ITheme } from "../../config/theme";
 import get from "lodash.get";
 import isplainobject from "lodash.isplainobject";
 import set from "lodash.set";
-import { runInAction } from "mobx";
+import {
+  isObservable,
+  isObservableArray,
+  reaction,
+  runInAction,
+  spy,
+  trace,
+} from "mobx";
 import { observer, useLocalObservable } from "mobx-react";
 import React, { ReactElement, useEffect } from "react";
 import * as Yup from "yup";
 import { ObjectShape } from "yup/lib/object";
+import Fonts from "../../assets/fonts";
+import { ITheme } from "../../config/theme";
 import Button from "../Button";
 import Text from "../Text";
 
@@ -106,7 +113,13 @@ export default observer((props: IFromProps) => {
   const validate = async () => {
     let err = {};
     if (!!validationSchema) {
-      const validateData = prepareDataForValidation(values);
+      let v = values;
+      try {
+        v = values._json;
+      } catch (error) {
+        console.warn(error);
+      }
+      const validateData = prepareDataForValidation(v);
       await Yup.object()
         .shape(validationSchema)
         .validate(validateData, {
@@ -132,7 +145,22 @@ export default observer((props: IFromProps) => {
     });
   };
 
+  const checkArray = () => {
+    let keys = Object.keys(values);
+    keys.map((item) => {
+      if (isObservableArray(values[item])) {
+        reaction(
+          () => values[item].length,
+          () => {
+            validate();
+          }
+        );
+      }
+    });
+  };
+
   useEffect(() => {
+    checkArray();
     if (!!isFocused) {
       validate();
     }
