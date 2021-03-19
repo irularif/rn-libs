@@ -11,12 +11,13 @@ import Text from "../Text";
 export interface IOTP {
   length: number;
   value: any;
+  style?: TextStyle;
   onChange?: (value: string) => void;
   validation?: (value: string) => string | undefined;
 }
 
 export default observer((props: IOTP) => {
-  const { value, onChange, length, validation } = props;
+  const { value, onChange, length, validation, style } = props;
   const Theme: ITheme = useTheme() as any;
   const meta = useLocalObservable(() => ({
     otp: Array(length).fill("") as any[],
@@ -53,7 +54,12 @@ export default observer((props: IOTP) => {
           flexDirection: "row",
         }}
       >
-        <Input inputRef={inputRef} onChange={onChange} meta={meta} />
+        <Input
+          inputRef={inputRef}
+          onChange={onChange}
+          meta={meta}
+          style={style}
+        />
       </View>
       <Error meta={meta} validation={validation} value={value} />
     </>
@@ -90,23 +96,16 @@ const Error = observer((props: any) => {
 });
 
 const Input = observer((props: any) => {
-  const { inputRef, onChange, meta } = props;
+  const { inputRef, onChange, meta, style } = props;
   const Theme: ITheme = useTheme() as any;
 
   let baseStyle: TextStyle = {
-    overflow: "hidden",
-    flexDirection: "row",
-    borderWidth: 1,
-    borderColor: Theme.colors.border,
     alignItems: "center",
-    paddingHorizontal: 5,
-    borderRadius: 4,
     textAlign: "center",
-    fontFamily: Theme.fontStyle.bold,
-    fontSize: Theme.fontSize.h2,
+    fontSize: Theme.fontSize.h1,
   };
 
-  const cstyleInput = StyleSheet.flatten([baseStyle, Theme.styles.field]);
+  const cstyleInput = StyleSheet.flatten([baseStyle, Theme.styles.input]);
 
   const focusPrevious = (key: string, index: number) => {
     if (key === "Backspace" && index !== 0) inputRef[index - 1].focus();
@@ -146,8 +145,10 @@ const Input = observer((props: any) => {
           keyboardType="number-pad"
           onChangeValue={(v) => focusNext(key, v)}
           onKeyPress={(e) => focusPrevious(e.nativeEvent.key, key)}
+          secureTextEntry
           style={StyleSheet.flatten([
             cstyleInput,
+            style,
             {
               marginRight: key < meta.otp.length - 1 ? 5 : 0,
             },

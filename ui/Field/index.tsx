@@ -58,7 +58,6 @@ export default observer((props: IField) => {
       editable === false ? Theme.colors.background : Theme.colors.card,
     alignItems: "center",
     borderRadius: 4,
-    flexGrow: 1,
     flexShrink: 1,
   };
   let removedBgInput = {};

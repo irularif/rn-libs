@@ -1,12 +1,10 @@
 import { loadAsync } from "expo-font";
-import { DefaultTheme } from "libs/config/theme";
 import { observer } from "mobx-react";
 import React, { ReactElement, useState } from "react";
 import { sourceFonts } from "../../assets/fonts";
 import permissions from "../../config/permissions";
 import useAsyncEffect from "../../hooks/useAsyncEffect";
 import Screen from "../Screen";
-import View from "../View";
 
 interface IAppProvider {
   children: ReactElement;

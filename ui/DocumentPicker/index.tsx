@@ -1,13 +1,13 @@
-import { observer, useLocalObservable } from "mobx-react";
-import React from "react";
-import * as DocumentPicker from "expo-document-picker";
-import { ViewStyle } from "react-native";
-import Button from "../Button";
-import { generateDocumentPicker } from "./generator";
-import Icon from "../Icon";
-import { ITheme } from "../../config/theme";
 import { useTheme } from "@react-navigation/native";
+import * as DocumentPicker from "expo-document-picker";
+import { observer } from "mobx-react";
+import React from "react";
+import { ViewStyle } from "react-native";
+import { ITheme } from "../../config/theme";
+import Button from "../Button";
+import Icon from "../Icon";
 import Text from "../Text";
+import { generateDocumentPicker } from "./generator";
 
 export interface IDocumentPicker extends DocumentPicker.DocumentPickerOptions {
   value?: string;

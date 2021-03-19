@@ -1,15 +1,15 @@
 import { useTheme } from "@react-navigation/native";
-import { ITheme } from "../../config/theme";
 import _ from "lodash";
 import { runInAction } from "mobx";
 import { observer, useLocalObservable } from "mobx-react";
-import React, { ReactElement, useRef } from "react";
+import React, { ReactElement } from "react";
 import { Dimensions, StyleSheet, ViewStyle } from "react-native";
 import Carousel, {
   CarouselProps as OriginCarouselProps,
   Pagination as PaginationOrigin,
   PaginationProps as OriginPaginationProps,
 } from "react-native-snap-carousel";
+import { ITheme } from "../../config/theme";
 
 export interface ICarouselProps extends OriginCarouselProps<any> {
   children?: (data: any, activeSlide: number) => ReactElement;

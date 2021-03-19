@@ -20,6 +20,7 @@ export { default as Spinner } from "./Spinner";
 export { default as Text } from "./Text";
 export { default as TopBar } from "./TopBar";
 export { default as View } from "./View";
+export { default as PagerView } from "./PagerView";
 export { default as WebView } from "./WebView";
 export { default as MapView, Marker } from "./MapView";
 export { default as ImageBackground } from "./ImageBackground";
