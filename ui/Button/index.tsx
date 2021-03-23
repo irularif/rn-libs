@@ -24,16 +24,24 @@ export interface IButtonProps extends TouchableOpacityProps {
   styles?: IStyles;
   label?: string;
   style?: ViewStyle;
+  disableOpacity?: number;
 }
 
 export default (props: IButtonProps) => {
-  const { disabled, shadow, mode = "contained", children, label } = props;
+  const {
+    disabled,
+    shadow,
+    mode = "contained",
+    children,
+    label,
+    disableOpacity,
+  } = props;
   const Theme: ITheme = useTheme() as any;
   const cprops = { ...props };
   delete cprops.styles;
   const disabledStyle = StyleSheet.flatten([
     {
-      opacity: 0.5,
+      opacity: disableOpacity !== undefined ? disableOpacity : 0.5,
     },
     props?.styles?.disabled,
   ]);
