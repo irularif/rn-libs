@@ -16,5 +16,12 @@ export default observer((props: IPagerViewProps) => {
   const shadowStyle = !!shadow ? Theme.shadow : {};
   let cstyle = StyleSheet.flatten([shadowStyle, style]);
 
-  return <PagerView {...(props as any)} style={cstyle} ref={childRef} />;
+  return (
+    <PagerView
+      initialPage={0}
+      {...(props as any)}
+      style={cstyle}
+      ref={childRef}
+    />
+  );
 });
