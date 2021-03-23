@@ -1,7 +1,7 @@
 import { useIsFocused, useNavigation } from "@react-navigation/native";
 import { runInAction } from "mobx";
 import { useEffect } from "react";
-import { BackHandler } from "react-native";
+import { Alert, BackHandler } from "react-native";
 import { ITopBarProps } from ".";
 
 export const generateTopBar = (props: ITopBarProps, meta: any) => {
@@ -27,7 +27,14 @@ export const generateTopBar = (props: ITopBarProps, meta: any) => {
           if (!!meta.exit) runInAction(() => (meta.exit = false));
         } else {
           if (!!meta.exit) {
-            BackHandler.exitApp();
+            Alert.alert("Exit", "Are you sure you want to exit?", [
+              {
+                text: "Cancel",
+                onPress: () => runInAction(() => (meta.exit = false)),
+                style: "cancel",
+              },
+              { text: "YES", onPress: () => BackHandler.exitApp() },
+            ]);
           } else {
             runInAction(() => (meta.exit = true));
           }
@@ -36,14 +43,13 @@ export const generateTopBar = (props: ITopBarProps, meta: any) => {
 
   useEffect(() => {
     let backHandler: any;
-    if (isFocused) {
+    if (!!isFocused) {
       backHandler = BackHandler.addEventListener("hardwareBackPress", () => {
-        if (!!isFocused) {
-          onPressBack();
-          return true;
-        }
+        onPressBack();
+        return true;
       });
     }
+    console.log(backHandler);
 
     return () => {
       if (!!backHandler) {
