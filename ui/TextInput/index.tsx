@@ -1,10 +1,12 @@
 import { useTheme } from "@react-navigation/native";
 import { ITheme } from "../../config/theme";
-import { observer } from "mobx-react";
+import { observer, useLocalObservable } from "mobx-react";
 import React, { useRef, useState } from "react";
 import { StyleSheet, TextInput, TextInputProps } from "react-native";
 import Button from "../Button";
 import Icon from "../Icon";
+import { runInAction, toJS } from "mobx";
+import { mask, unmask } from "../../utils/string-masking";
 
 export type IInputType =
   | "text"
@@ -13,19 +15,36 @@ export type IInputType =
   | "decimal"
   | "multiline"
   | "currency"
-  | "email";
+  | "email"
+  | "mask";
 
 export interface ITextInput extends TextInputProps {
   type: IInputType;
   onChangeValue?: (value: string) => void;
   inputRef?: any;
+  mask?: string;
 }
 
 export default observer((props: ITextInput) => {
-  const { type, onChangeValue, style, editable, value, inputRef } = props;
+  const {
+    type,
+    onChangeValue,
+    style,
+    editable,
+    value,
+    inputRef,
+    mask: p,
+  } = props;
   const [secure, setsecure] = useState(true);
   const originalType = useRef(type);
   const Theme: ITheme = useTheme() as any;
+  const pattern = p;
+  const inpLength = pattern?.replace(/[^_]/g, "").length;
+  const meta = useLocalObservable(() => ({
+    start: 0,
+    end: 0,
+  }));
+
   const setValue = (text: any) => {
     let v;
     switch (type || originalType.current) {
@@ -52,7 +71,35 @@ export default observer((props: ITextInput) => {
     onChangeValue && onChangeValue(v);
   };
 
-  const cprops = { ...props, onChangeText: setValue, ref: inputRef };
+  const onKeyPress = (e: any) => {
+    const key = e.nativeEvent.key;
+    let pos = meta.start;
+    if (key === "Backspace") {
+      pos -= 1;
+    } else {
+      pos += 1;
+    }
+
+    if (!!value && pos + 1 > value?.length) {
+      pos = value?.length;
+    } else {
+      pos = pos;
+    }
+
+    setTimeout(() => {
+      runInAction(() => {
+        meta.start = pos;
+        meta.end = pos;
+      });
+    }, 0);
+  };
+
+  const cprops = {
+    ...props,
+    onChangeText: setValue,
+    onKeyPress,
+    ref: inputRef,
+  };
   const cstyle = StyleSheet.flatten([
     {
       flex: 1,
@@ -121,6 +168,20 @@ export default observer((props: ITextInput) => {
         ...ComponentProps,
       };
       break;
+    case "mask":
+      let v = !!pattern
+        ? !!value
+          ? mask(value, pattern).result
+          : pattern
+        : value;
+      ComponentProps = {
+        ...ComponentProps,
+        value: v,
+        selection: toJS(meta),
+        max: pattern?.length,
+      };
+      console.log("asd", v);
+      break;
   }
   return (
     <>
@@ -147,3 +208,14 @@ export default observer((props: ITextInput) => {
     </>
   );
 });
+
+// Masking
+// 0	Any numbers
+// 9	Any numbers (Optional)
+// #	Any numbers (recursive)
+// A	Any alphanumeric character
+// a	Any alphanumeric character (Optional) Not implemented yet
+// S	Any letter
+// U	Any letter (All lower case character will be mapped to uppercase)
+// L	Any letter (All upper case character will be mapped to lowercase)
+// $	Escape character, used to escape any of the special formatting characters.
