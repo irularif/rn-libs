@@ -56,7 +56,7 @@ export default observer((props: IContainerProps) => {
         </View>
       )}
       {get(props, "scrollEnabled", true) === false ? (
-        <View {...props} style={cstyle} viewRef={scrollRef} />
+        <View {...props} style={cstyle} childRef={scrollRef} />
       ) : (
         <ScrollView
           {...props}
