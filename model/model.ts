@@ -275,7 +275,7 @@ export abstract class Model {
       }
       dataStr = !!dataStr ? JSLZString.decompressFromBase64(dataStr) : "";
       let content: any = dataStr;
-      if (!!options.encrypt && !!content) {
+      if (!!options?.encrypt && !!content) {
         content = await decrypt(JSON.parse(content), key);
       }
       if (!!content) {

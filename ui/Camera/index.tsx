@@ -26,6 +26,7 @@ export interface ICamera {
   renderPreview?: (uri: string) => ReactElement;
   cameraView?: ICameraView;
   placeholder?: string;
+  prefixUri?: string;
 }
 
 export default observer((props: ICamera) => {
@@ -115,7 +116,7 @@ const Preview = observer((props: any) => {
 });
 
 const CameraSegment = observer((props: any) => {
-  const { value, setSource, meta, cameraView } = props;
+  const { setSource, meta, cameraView, source } = props;
 
   if (!meta.visbleCameraView) return null;
 
@@ -129,7 +130,7 @@ const CameraSegment = observer((props: any) => {
           meta.visbleCameraView = !visible;
         });
       }}
-      source={value}
+      source={source.uri}
       setSource={setSource}
     />
   );

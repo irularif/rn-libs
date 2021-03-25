@@ -115,27 +115,29 @@ export default observer((props: IFromProps) => {
     if (!!validationSchema) {
       let v = values;
       try {
-        v = values._json;
+        if (!!values._json) {
+          v = values._json;
+        }
+        const validateData = prepareDataForValidation(v);
+        await Yup.object()
+          .shape(validationSchema)
+          .validate(validateData, {
+            abortEarly: false,
+          })
+          .catch((e) => {
+            if (e.name === "ValidationError") {
+              err = yupToFormErrors(e);
+            } else {
+              // We throw any other errors
+              console.warn(
+                "Warning: An unhandled error was caught during validation in <Formik validationSchema />",
+                err
+              );
+            }
+          });
       } catch (error) {
         console.warn(error);
       }
-      const validateData = prepareDataForValidation(v);
-      await Yup.object()
-        .shape(validationSchema)
-        .validate(validateData, {
-          abortEarly: false,
-        })
-        .catch((e) => {
-          if (e.name === "ValidationError") {
-            err = yupToFormErrors(e);
-          } else {
-            // We throw any other errors
-            console.warn(
-              "Warning: An unhandled error was caught during validation in <Formik validationSchema />",
-              err
-            );
-          }
-        });
     } else if (!!validation) {
       err = validation(values);
     }

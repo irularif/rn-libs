@@ -15,6 +15,7 @@ export const generateCamera = (props: ICamera, meta: any) => {
     styles,
     cameraView,
     placeholder,
+    prefixUri,
     onChangeValue,
     onChange,
     onBlur,
@@ -26,6 +27,9 @@ export const generateCamera = (props: ICamera, meta: any) => {
     source = {
       uri: value,
     };
+    if (value.indexOf("file://") === -1 && !!prefixUri) {
+      source.uri = prefixUri + value;
+    }
   }
 
   const dim = Dimensions.get("window");
@@ -145,7 +149,7 @@ export const generateCameraView = (
   };
 
   useEffect(() => {
-    if (meta.tempURI !== source && typeof source === "string") {
+    if (!!source && meta.tempURI !== source && typeof source === "string") {
       runInAction(() => (meta.tempURI = source));
     }
   }, [source]);
