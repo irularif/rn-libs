@@ -11,6 +11,7 @@ import Text from "../Text";
 import View from "../View";
 import { generateInput } from "./generator";
 import { get } from "lodash";
+import DateTime from "../DateTime";
 
 export interface IField {
   label: string | ReactElement;

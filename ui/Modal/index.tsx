@@ -23,6 +23,8 @@ export default observer((props: ModalProps) => {
     left: 0,
     right: 0,
     bottom: 0,
+    justifyContent: "center",
+    alignItems: "center",
   };
   const cstyle = StyleSheet.flatten([baseStyle, style, screenProps?.style]);
   return (

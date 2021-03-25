@@ -56,7 +56,7 @@ const DateLabel = observer((props: any) => {
   ]);
   const labelStyle = StyleSheet.flatten([
     {
-      flex: 1,
+      flexGrow: 1,
     },
     styles?.label,
   ]);
