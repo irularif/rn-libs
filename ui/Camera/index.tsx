@@ -130,7 +130,7 @@ const CameraSegment = observer((props: any) => {
           meta.visbleCameraView = !visible;
         });
       }}
-      source={source.uri}
+      source={source?.uri}
       setSource={setSource}
     />
   );
