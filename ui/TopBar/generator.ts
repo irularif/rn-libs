@@ -49,7 +49,6 @@ export const generateTopBar = (props: ITopBarProps, meta: any) => {
         return true;
       });
     }
-    console.log(backHandler);
 
     return () => {
       if (!!backHandler) {
