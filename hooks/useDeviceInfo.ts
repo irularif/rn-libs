@@ -5,9 +5,11 @@ import useAsyncEffect from "./useAsyncEffect";
 export default () => {
   const [deviceInfo, setDeviceInfo] = useState({});
   useAsyncEffect(async () => {
-    await DeviceInformation().then((res: any) => {
-      setDeviceInfo(res);
-    });
+    await DeviceInformation()
+      .then((res: any) => {
+        setDeviceInfo(res);
+      })
+      .catch((e) => console.log(e));
   }, []);
 
   return deviceInfo as IDeviceInformation;
