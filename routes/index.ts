@@ -23,6 +23,10 @@ export interface IRoute {
   name: string;
   title?: string;
   icon?: IIcon | ReactElement;
+  imageIcon?: {
+    active: any;
+    inActive: any;
+  };
   component?: React.ComponentType<any>;
   roles: string[];
 }
