@@ -5,20 +5,34 @@ export interface IAPI extends AxiosRequestConfig {
   onError?: (res: any) => void;
 }
 
-export default (e: IAPI) => {
+const Axios = axios.create({
+  transformResponse: [
+    function transformResponse(data, headers) {
+      let res = data;
+      try {
+        res = JSON.parse(res);
+      } catch (error) {
+        console.log(error, res);
+      }
+      return res;
+    },
+  ],
+});
+
+const api = async (e: IAPI) => {
   let url = e.url;
   const headers = {
-    "content-type": "application/json",
+    Accept: "application/json",
+    "Content-Type": "application/json",
     ...get(e, "headers", {}),
   };
   let onError: any;
   if (e.onError) {
     onError = e.onError;
   }
-
   return new Promise(async (resolve, reject) => {
     try {
-      const res = await axios({ ...e, url, headers });
+      const res = await Axios({ ...e, url, headers });
       if (res.status >= 200 && res.status < 300) {
         if (!!res.data) resolve(res.data);
         else resolve(res);
@@ -41,3 +55,5 @@ export default (e: IAPI) => {
     }
   });
 };
+
+export default api;
