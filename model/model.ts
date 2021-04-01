@@ -237,6 +237,9 @@ export abstract class Model {
                   applyValue(selfKey, value[key], self[selfKey], valueMeta)
                 )
               );
+
+              // if (selfKey === "complements" || selfKey === "product")
+              //   console.log(selfKey, self[selfKey], value[key]);
             }
           } else if (self[selfKey] instanceof Model) {
             self[selfKey]._loadJSON(
