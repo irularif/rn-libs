@@ -24,6 +24,7 @@ export const dateFormat = (
       locale: (locales as any)[locale],
     });
   } catch (e) {
-    return value;
+    console.log(e);
+    return format || "";
   }
 };

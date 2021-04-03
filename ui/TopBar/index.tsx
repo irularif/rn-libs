@@ -54,7 +54,7 @@ export default (props: ITopBarProps) => {
     paddingTop: 8 + statusBarHeight,
     flexDirection: "row",
     alignItems: "center",
-    height: 56 + statusBarHeight,
+    minHeight: 56 + statusBarHeight,
     backgroundColor: Theme.colors.primary,
     zIndex: 9,
     margin: 0,
