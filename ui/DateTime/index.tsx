@@ -1,6 +1,6 @@
 import { useTheme } from "@react-navigation/native";
 import { observer, useLocalObservable } from "mobx-react";
-import React from "react";
+import React, { ReactElement } from "react";
 import { StyleSheet, TextStyle, ViewStyle } from "react-native";
 import { ITheme } from "../../config/theme";
 import Button from "../Button";
@@ -28,6 +28,7 @@ export interface IDateTime {
   };
   iconProps?: Partial<IIcon>;
   dateProps?: IDateTimeView;
+  Label?: (props: any) => ReactElement;
 }
 
 export default observer((props: IDateTime) => {
@@ -36,24 +37,28 @@ export default observer((props: IDateTime) => {
   }));
 
   const cprops: any = generateDate(props, meta);
+  const cstyle = StyleSheet.flatten([
+    {
+      paddingHorizontal: 5,
+      alignItems: "flex-start",
+      justifyContent: "flex-start",
+    },
+    cprops?.styles?.wraper,
+  ]);
 
   return (
     <>
-      <DateLabel {...cprops} meta={meta} />
+      <Button mode="clean" onPress={cprops?.switchCalendar} style={cstyle}>
+        <DateLabel {...cprops} meta={meta} />
+      </Button>
       <DateTimeView {...cprops.dateProps} />
     </>
   );
 });
 
 const DateLabel = observer((props: any) => {
-  const { label, switchCalendar, iconProps, styles } = props;
+  const { label, value, iconProps, styles, Label } = props;
   const Theme: ITheme = useTheme() as any;
-  const cstyle = StyleSheet.flatten([
-    {
-      paddingHorizontal: 5,
-    },
-    styles?.wraper,
-  ]);
   const labelStyle = StyleSheet.flatten([
     {
       flexGrow: 1,
@@ -61,10 +66,14 @@ const DateLabel = observer((props: any) => {
     styles?.label,
   ]);
 
+  if (!!Label) {
+    return Label({ label, value });
+  }
+
   return (
-    <Button mode="clean" onPress={switchCalendar} style={cstyle}>
+    <>
       <Text style={labelStyle}>{label}</Text>
       <Icon name="md-calendar" color={Theme.colors.text} {...iconProps} />
-    </Button>
+    </>
   );
 });

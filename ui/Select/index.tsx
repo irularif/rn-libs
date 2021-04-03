@@ -2,7 +2,13 @@ import { useIsFocused, useTheme } from "@react-navigation/native";
 import { ITheme } from "../../config/theme";
 import { observer, useLocalObservable } from "mobx-react";
 import React, { ReactElement, useEffect, useRef, useState } from "react";
-import { StyleSheet, Text, TextStyle, ViewStyle } from "react-native";
+import {
+  StyleSheet,
+  Text,
+  TextStyle,
+  useWindowDimensions,
+  ViewStyle,
+} from "react-native";
 import Button from "../Button";
 import Field from "../Field";
 import FlatList from "../FlatList";
@@ -152,6 +158,7 @@ const LabelSelect = observer((props: any) => {
 });
 
 const SelectView = observer((props: any) => {
+  const dim = useWindowDimensions();
   const { items, onFilter, manualSearch, meta, selected } = props;
   const [index, setIndex] = useState(0);
   const isFocused = useIsFocused();
@@ -193,6 +200,9 @@ const SelectView = observer((props: any) => {
             ref.current?.scrollToIndex({ index: error.index, animated: true });
           }
         }, 10);
+      }}
+      style={{
+        width: dim.width,
       }}
     />
   );

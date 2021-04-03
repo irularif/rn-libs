@@ -19,6 +19,7 @@ export const generateDate = (props: IDateTime, meta: any) => {
     onBlur,
     onChangeValue,
     onChange,
+    Label,
   } = props;
 
   const v = !!value && typeof value === "string" ? new Date(value) : "";
@@ -94,10 +95,12 @@ export const generateDate = (props: IDateTime, meta: any) => {
 
   return {
     label,
+    value: v,
     dateProps,
     iconProps,
     styles,
     switchCalendar,
+    Label,
   };
 };
 
