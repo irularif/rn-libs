@@ -22,7 +22,11 @@ export const generateDate = (props: IDateTime, meta: any) => {
     Label,
   } = props;
 
-  const v = !!value && typeof value === "string" ? new Date(value) : "";
+  let v = null;
+  if (!!value && typeof value === "string") {
+    v = new Date(value);
+  }
+
   let labelF = labelFormat;
   let dateF = format;
   if (!labelF) {
@@ -44,31 +48,19 @@ export const generateDate = (props: IDateTime, meta: any) => {
         break;
     }
   }
-  if (!dateF) {
-    switch (type) {
-      case "date":
-        dateF = "yyyy-MM-dd";
-        break;
-      case "time":
-        dateF = "HH:mm:ss";
-        break;
-      case "datetime":
-        dateF = "yyyy-MM-dd HH:mm:ss";
-        break;
-      case "monthly":
-        dateF = "yyyy-MM";
-        break;
-      case "yearly":
-        dateF = "yyyy";
-        break;
-    }
-  }
 
-  const label = !!v ? dateFormat(v, labelF) : dateF;
+  let label = labelF;
+  if (v instanceof Date) {
+    label = dateFormat(v, labelF);
+  }
 
   const handleChange = (ev: any, date: Date) => {
     if (!!onChangeValue) {
-      onChangeValue(dateFormat(date, dateF));
+      let d = date.toJSON();
+      if (dateF) {
+        d = dateFormat(date, dateF);
+      }
+      onChangeValue(d);
     }
     if (!!onChange) {
       onChange(ev, date);
