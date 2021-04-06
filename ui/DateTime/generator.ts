@@ -21,14 +21,12 @@ export const generateDate = (props: IDateTime, meta: any) => {
     onChange,
     Label,
   } = props;
-
   let v = null;
   if (!!value && typeof value === "string") {
     v = new Date(value);
   }
 
   let labelF = labelFormat;
-  let dateF = format;
   if (!labelF) {
     switch (type) {
       case "date":
@@ -45,6 +43,18 @@ export const generateDate = (props: IDateTime, meta: any) => {
         break;
       case "yearly":
         labelF = "yyyy";
+        break;
+    }
+  }
+
+  let dateF = format;
+  if (!dateF) {
+    switch (type) {
+      case "date":
+        dateF = "yyyy-MM-dd";
+        break;
+      case "time":
+        dateF = "HH:mm";
         break;
     }
   }

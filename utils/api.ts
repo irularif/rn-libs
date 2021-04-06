@@ -7,7 +7,7 @@ export interface IAPI extends AxiosRequestConfig {
 
 const Axios = axios.create({
   transformResponse: [
-    function transformResponse(data, headers) {
+    function transformResponse(data, _) {
       let res = data;
       try {
         res = JSON.parse(res);

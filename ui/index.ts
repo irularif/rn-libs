@@ -25,6 +25,7 @@ export { default as WebView } from "./WebView";
 export { default as MapView, Marker } from "./MapView";
 export { default as ImageBackground } from "./ImageBackground";
 export { default as SectionList } from "./SectionList";
+export { default as LinierGradient } from "./LinierGradient";
 export { default as BarCodeScanner } from "./BarCodeScanner";
 export { default as DocumentPicker } from "./DocumentPicker";
 export { default as ReactNavigation } from "./ReactNavigation";
