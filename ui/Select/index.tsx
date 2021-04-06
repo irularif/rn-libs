@@ -57,6 +57,7 @@ export interface ISelect extends IViewProps {
   onChangeValue?: (value: string) => void;
   onBlur?: () => void;
   renderItem?: (props: IPropsItem) => ReactElement;
+  renderLabel?: (props: IPropsItem) => ReactElement;
   onSearch?: (search: string, item?: any) => boolean | void;
   style?: ViewStyle;
   styles?: {
@@ -129,7 +130,7 @@ export default observer((props: ISelect) => {
 });
 
 const LabelSelect = observer((props: any) => {
-  const { label, switchSelect, styles, style } = props;
+  const { label, switchSelect, styles, style, renderLabel, value } = props;
   const Theme: ITheme = useTheme() as any;
   const cStyle = StyleSheet.flatten([
     {
@@ -147,12 +148,18 @@ const LabelSelect = observer((props: any) => {
 
   return (
     <Button mode="clean" onPress={switchSelect} style={cStyle}>
-      <Text style={labelStyle}>{label}</Text>
-      <Icon
-        name="ios-arrow-down"
-        color={Theme.colors.text}
-        style={styles?.icon}
-      />
+      {!!renderLabel ? (
+        renderLabel({ label, value })
+      ) : (
+        <>
+          <Text style={labelStyle}>{label}</Text>
+          <Icon
+            name="ios-arrow-down"
+            color={Theme.colors.text}
+            style={styles?.icon}
+          />
+        </>
+      )}
     </Button>
   );
 });
