@@ -1,7 +1,12 @@
 import { runInAction } from "mobx";
 import { observer, useLocalObservable } from "mobx-react";
 import React from "react";
-import { Dimensions, StyleSheet, ViewStyle } from "react-native";
+import {
+  Dimensions,
+  StyleSheet,
+  TouchableOpacity,
+  ViewStyle,
+} from "react-native";
 import FastImage, { FastImageProps, ImageStyle } from "react-native-fast-image";
 import Button from "../Button";
 import Modal from "../Modal";
@@ -84,13 +89,20 @@ const ImagePreview = observer((props: any) => {
       visible={meta.visible}
       onDismiss={switchVisible}
       onRequestClose={switchVisible}
-      screenProps={{
-        style: {
-          backgroundColor: "#000000",
-        },
-      }}
     >
-      <FastImage resizeMode="contain" {...props} style={baseStyle} />;
+      <TouchableOpacity
+        style={{
+          position: "absolute",
+          top: 0,
+          left: 0,
+          right: 0,
+          bottom: 0,
+          backgroundColor: "#00000000",
+          zIndex: 9,
+        }}
+        onPress={switchVisible}
+      />
+      <FastImage resizeMode="contain" {...props} style={baseStyle} />
     </Modal>
   );
 });
