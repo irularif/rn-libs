@@ -22,11 +22,9 @@ export default observer((props: ISectionListProps) => {
   ]);
   return (
     <SectionList
-      windowSize={21}
-      removeClippedSubviews={true}
-      initialNumToRender={30}
-      maxToRenderPerBatch={40}
-      updateCellsBatchingPeriod={80}
+      windowSize={8}
+      initialNumToRender={12}
+      maxToRenderPerBatch={16}
       {...props}
       style={cstyle}
       contentContainerStyle={ccontentContainerStyle}
