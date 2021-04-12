@@ -53,7 +53,7 @@ export default observer((props: ICamera) => {
         mode={"clean"}
         style={cstyle}
         onPress={cprops.switchCameraView}
-        disabled={editable === false}
+        disabled={!editable}
       >
         <Preview {...cprops} />
       </Button>
@@ -63,7 +63,14 @@ export default observer((props: ICamera) => {
 });
 
 const Preview = observer((props: any) => {
-  const { source, renderPreview, clearSource, styles, placeholder } = props;
+  const {
+    source,
+    renderPreview,
+    clearSource,
+    styles,
+    placeholder,
+    editable,
+  } = props;
   const Theme: ITheme = useTheme() as any;
 
   if (!!renderPreview) {
@@ -80,7 +87,12 @@ const Preview = observer((props: any) => {
     ]);
     return (
       <>
-        <Image source={source} resizeMode="cover" style={cstyle} />
+        <Image
+          source={source}
+          resizeMode="cover"
+          style={cstyle}
+          enablePreview={!editable}
+        />
         <Button
           style={{
             position: "absolute",
@@ -116,7 +128,7 @@ const Preview = observer((props: any) => {
 });
 
 const CameraSegment = observer((props: any) => {
-  const { setSource, meta, cameraView, source } = props;
+  const { setSource, meta, cameraView, source, editable } = props;
 
   if (!meta.visbleCameraView) return null;
 
@@ -132,6 +144,7 @@ const CameraSegment = observer((props: any) => {
       }}
       source={source?.uri}
       setSource={setSource}
+      editable={editable}
     />
   );
 });
