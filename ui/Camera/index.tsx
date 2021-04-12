@@ -53,7 +53,7 @@ export default observer((props: ICamera) => {
         mode={"clean"}
         style={cstyle}
         onPress={cprops.switchCameraView}
-        disabled={!editable}
+        disabled={editable === false}
       >
         <Preview {...cprops} />
       </Button>
@@ -91,7 +91,7 @@ const Preview = observer((props: any) => {
           source={source}
           resizeMode="cover"
           style={cstyle}
-          enablePreview={!editable}
+          enablePreview={editable === false}
         />
         <Button
           style={{

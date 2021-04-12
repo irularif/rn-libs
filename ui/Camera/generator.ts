@@ -91,7 +91,6 @@ export const generateCameraView = (
     visible,
     disableImagePicker,
     source,
-    editable,
     setSource,
     setVisible,
   } = props;
@@ -166,7 +165,6 @@ export const generateCameraView = (
     option,
     withCompress,
     disableImagePicker: !!disableImagePicker,
-    editable,
     requestPermission,
     onDismiss,
     onSave,

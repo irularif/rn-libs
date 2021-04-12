@@ -160,7 +160,7 @@ const LabelSelect = observer((props: any) => {
       mode="clean"
       onPress={switchSelect}
       style={cStyle}
-      disabled={!editable}
+      disabled={editable === false}
     >
       {!!renderLabel ? (
         renderLabel({ label, value })

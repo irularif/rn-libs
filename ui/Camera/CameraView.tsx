@@ -27,7 +27,6 @@ export interface ICameraView extends CameraProps {
   option?: CameraPictureOptions;
   withCompress?: boolean;
   disableImagePicker?: boolean;
-  editable?: boolean;
 }
 
 export interface ICameraViewProps {
