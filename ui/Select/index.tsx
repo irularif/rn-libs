@@ -67,7 +67,7 @@ export interface ISelect extends IViewProps {
     item?: ViewStyle;
     icon?: TextStyle;
   };
-  editable: boolean;
+  editable?: boolean;
 }
 
 export default observer((props: ISelect) => {
