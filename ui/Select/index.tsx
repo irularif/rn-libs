@@ -67,6 +67,7 @@ export interface ISelect extends IViewProps {
     item?: ViewStyle;
     icon?: TextStyle;
   };
+  editable: boolean;
 }
 
 export default observer((props: ISelect) => {
@@ -130,7 +131,15 @@ export default observer((props: ISelect) => {
 });
 
 const LabelSelect = observer((props: any) => {
-  const { label, switchSelect, styles, style, renderLabel, value } = props;
+  const {
+    label,
+    switchSelect,
+    styles,
+    style,
+    renderLabel,
+    value,
+    editable,
+  } = props;
   const Theme: ITheme = useTheme() as any;
   const cStyle = StyleSheet.flatten([
     {
@@ -147,7 +156,12 @@ const LabelSelect = observer((props: any) => {
   ]);
 
   return (
-    <Button mode="clean" onPress={switchSelect} style={cStyle}>
+    <Button
+      mode="clean"
+      onPress={switchSelect}
+      style={cStyle}
+      disabled={!editable}
+    >
       {!!renderLabel ? (
         renderLabel({ label, value })
       ) : (
