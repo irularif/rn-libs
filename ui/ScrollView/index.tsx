@@ -37,6 +37,7 @@ export default observer((props: IContainerProps) => {
       // type={Platform.OS == "ios" ? "KeyboardAvoidingView" : "View"}
       ref={keyboardRef}
       enabled={true}
+      // if using inside tag Modal use 'padding'
       behavior={Platform.OS == "ios" ? "padding" : "height"}
       style={{
         flexGrow: 1,
