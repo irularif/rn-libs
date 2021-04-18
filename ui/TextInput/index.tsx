@@ -16,6 +16,7 @@ export type IInputType =
   | "multiline"
   | "currency"
   | "email"
+  | "float"
   | "mask";
 
 export interface ITextInput extends TextInputProps {
@@ -62,6 +63,9 @@ export default observer((props: ITextInput) => {
         break;
       case "email":
         v = text.replace(/\s/g, "");
+        break;
+      case "float":
+        v = text.replace(/[^0-9.,]/g, "");
         break;
       default:
         v = text;
@@ -131,6 +135,7 @@ export default observer((props: ITextInput) => {
         secureTextEntry: secure,
       };
       break;
+    case "float":
     case "decimal":
     case "number":
       ComponentProps = {
