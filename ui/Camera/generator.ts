@@ -1,13 +1,14 @@
-import { Camera, CameraPictureOptions } from "expo-camera";
-import * as ImagePicker from "expo-image-picker";
-import imagePicker from "../../utils/image-picker";
-import imageResizer from "../../utils/image-resizer";
-import { runInAction } from "mobx";
-import { MutableRefObject, useEffect } from "react";
-import { Dimensions } from "react-native";
-import { ICamera } from ".";
-import libsStorage from "../libsStorage";
-import { ICameraView } from "./CameraView";
+import {Camera, CameraPictureOptions} from 'expo-camera';
+import * as ImagePicker from 'expo-image-picker';
+import imagePicker from '../../utils/image-picker';
+import imageResizer from '../../utils/image-resizer';
+import {runInAction} from 'mobx';
+import {MutableRefObject, useEffect} from 'react';
+import {Dimensions} from 'react-native';
+import {ICamera} from '.';
+import libsStorage from '../libsStorage';
+import {ICameraView} from './CameraView';
+import {Alert} from 'react-native';
 
 export const generateCamera = (props: ICamera, meta: any) => {
   const {
@@ -24,17 +25,17 @@ export const generateCamera = (props: ICamera, meta: any) => {
   } = props;
 
   let source = undefined;
-  if (!!value && typeof value === "string") {
+  if (!!value && typeof value === 'string') {
     source = {
       uri: value,
     };
-    if (value.indexOf("file://") === -1 && !!prefixUri) {
+    if (value.indexOf('file://') === -1 && !!prefixUri) {
       source.uri = prefixUri + value;
     }
   }
 
-  const dim = Dimensions.get("window");
-  const ratio = libsStorage.camera.ratio.split(":"),
+  const dim = Dimensions.get('window');
+  const ratio = libsStorage.camera.ratio.split(':'),
     width = dim.width,
     height = dim.width * (Number(ratio[0]) / Number(ratio[1]));
 
@@ -44,7 +45,7 @@ export const generateCamera = (props: ICamera, meta: any) => {
     }
     if (!!onChange) {
       const res = await onChange(uri);
-      if (!!res && typeof res === "string" && !!onChangeValue) {
+      if (!!res && typeof res === 'string' && !!onChangeValue) {
         onChangeValue(res);
       }
     }
@@ -54,7 +55,7 @@ export const generateCamera = (props: ICamera, meta: any) => {
   };
 
   const clearSource = () => {
-    setSource("");
+    setSource('');
   };
 
   const switchCameraView = () => {
@@ -82,7 +83,7 @@ export const generateCamera = (props: ICamera, meta: any) => {
 export const generateCameraView = (
   props: ICameraView,
   meta: any,
-  camViewRef: MutableRefObject<any>
+  camViewRef: MutableRefObject<any>,
 ) => {
   const {
     option,
@@ -95,16 +96,16 @@ export const generateCameraView = (
     setVisible,
   } = props;
   const ref = !!cameraRef ? cameraRef : camViewRef;
-  const dim = Dimensions.get("window");
+  const dim = Dimensions.get('window');
 
   // Camera Ratio
   const ratio = libsStorage.camera.ratio;
-  const arrratio = ratio.split(":"),
+  const arrratio = ratio.split(':'),
     width = dim.width,
     height = dim.width * (Number(arrratio[0]) / Number(arrratio[1]));
 
   // Camera Props
-  const cameraProps: any = { ...props, ...libsStorage.camera._json };
+  const cameraProps: any = {...props, ...libsStorage.camera._json};
   if (!!cameraProps.cameraRef) delete cameraProps.cameraRef;
   if (!!cameraProps.visible) delete cameraProps.visible;
   if (!!cameraProps.setVisible) delete cameraProps.setVisible;
@@ -116,7 +117,7 @@ export const generateCameraView = (
 
   // Request Permission
   const requestPermission = async () => {
-    const { granted: camGranted } = await Camera.requestPermissionsAsync();
+    const {granted: camGranted} = await Camera.requestPermissionsAsync();
     const {
       granted: pickGranted,
     } = await ImagePicker.requestMediaLibraryPermissionsAsync();
@@ -151,7 +152,7 @@ export const generateCameraView = (
   };
 
   useEffect(() => {
-    if (!!source && meta.tempURI !== source && typeof source === "string") {
+    if (!!source && meta.tempURI !== source && typeof source === 'string') {
       runInAction(() => (meta.tempURI = source));
     }
   }, [source]);
@@ -176,12 +177,12 @@ export const generateTools = () => {
   const flashMode = libsStorage.camera.flashMode;
   const switchFlashMode = () => {
     let flashMode = libsStorage.camera.flashMode;
-    if (flashMode === "auto") {
-      flashMode = "on";
-    } else if (flashMode === "on") {
-      flashMode = "off";
+    if (flashMode === 'auto') {
+      flashMode = 'on';
+    } else if (flashMode === 'on') {
+      flashMode = 'off';
     } else {
-      flashMode = "auto";
+      flashMode = 'auto';
     }
     runInAction(() => {
       libsStorage.camera.flashMode = flashMode;
@@ -205,12 +206,12 @@ export const generateTools = () => {
   const ratio = libsStorage.camera.ratio;
   const switchRatio = () => {
     let ratio = libsStorage.camera.ratio;
-    if (ratio === "1:1") {
-      ratio = "4:3";
-    } else if (ratio === "4:3") {
-      ratio = "16:9";
+    if (ratio === '1:1') {
+      ratio = '4:3';
+    } else if (ratio === '4:3') {
+      ratio = '16:9';
     } else {
-      ratio = "1:1";
+      ratio = '1:1';
     }
     runInAction(() => {
       libsStorage.camera.ratio = ratio;
@@ -230,7 +231,7 @@ export const generateActions = (
   camera: MutableRefObject<any>,
   meta: any,
   option?: CameraPictureOptions,
-  withCompress: boolean = false
+  withCompress: boolean = false,
 ) => {
   // Take a picture
   const actionSnap = () => {
@@ -245,17 +246,17 @@ export const generateActions = (
                   quality: 0.8,
                   base64: false,
                 },
-                option
-              )
+                option,
+              ),
             )
             .then(async (res: any) => {
               let uri = res.uri;
               if (withCompress == true) {
-                await imageResizer({ uri })
-                  .then((res) => {
+                await imageResizer({uri})
+                  .then(res => {
                     uri = res;
                   })
-                  .catch((e) => console.log(e));
+                  .catch(e => console.log(e));
               }
               runInAction(() => {
                 meta.tempURI = uri;
@@ -266,20 +267,20 @@ export const generateActions = (
             .catch((e: any) => {
               let msg = e.message;
               if (!msg) {
-                msg = "Failed to take a picture. Please try again.";
+                msg = 'Failed to take a picture. Please try again.';
               }
               if (!!meta.loading) runInAction(() => (meta.loading = true));
-              alert(msg);
+              Alert.alert('Alert', msg);
               reject(null);
             });
         }
       } catch (error) {
         let msg = error.message;
         if (!msg) {
-          msg = "Failed to take a picture. Please try again.";
+          msg = 'Failed to take a picture. Please try again.';
         }
         if (!!meta.loading) runInAction(() => (meta.loading = true));
-        alert(msg);
+        Alert.alert('Alert', msg);
         reject(null);
       }
     });
@@ -288,7 +289,7 @@ export const generateActions = (
   // Reset Camera
   const actionReset = () => {
     if (!!meta.tempURI) {
-      runInAction(() => (meta.tempURI = ""));
+      runInAction(() => (meta.tempURI = ''));
     }
   };
 
@@ -297,11 +298,11 @@ export const generateActions = (
     let uri = await imagePicker();
     if (!!uri) {
       if (withCompress == true) {
-        await imageResizer({ uri })
-          .then((res) => {
+        await imageResizer({uri})
+          .then(res => {
             uri = res;
           })
-          .catch((e) => console.log(e));
+          .catch(e => console.log(e));
       }
       runInAction(() => {
         meta.tempURI = uri;
