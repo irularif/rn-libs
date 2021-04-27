@@ -1,8 +1,8 @@
-import { useIsFocused, useNavigation } from "@react-navigation/native";
-import { runInAction } from "mobx";
-import { useEffect } from "react";
-import { Alert, BackHandler } from "react-native";
-import { ITopBarProps } from ".";
+import {useIsFocused, useNavigation} from '@react-navigation/native';
+import {runInAction} from 'mobx';
+import {useEffect} from 'react';
+import {Alert, BackHandler} from 'react-native';
+import {ITopBarProps} from '.';
 
 export const generateTopBar = (props: ITopBarProps, meta: any) => {
   const {
@@ -16,7 +16,7 @@ export const generateTopBar = (props: ITopBarProps, meta: any) => {
     styles,
     actionBackButton,
   } = props;
-  const { goBack, canGoBack } = useNavigation();
+  const {goBack, canGoBack} = useNavigation();
   const isFocused = useIsFocused();
 
   const onPressBack = !!actionBackButton
@@ -27,13 +27,13 @@ export const generateTopBar = (props: ITopBarProps, meta: any) => {
           if (!!meta.exit) runInAction(() => (meta.exit = false));
         } else {
           if (!!meta.exit) {
-            Alert.alert("Exit", "Are you sure you want to exit?", [
+            Alert.alert('Exit', 'Are you sure you want to exit?', [
               {
-                text: "Cancel",
+                text: 'Cancel',
                 onPress: () => runInAction(() => (meta.exit = false)),
-                style: "cancel",
+                style: 'cancel',
               },
-              { text: "YES", onPress: () => BackHandler.exitApp() },
+              {text: 'YES', onPress: () => BackHandler.exitApp()},
             ]);
           } else {
             runInAction(() => (meta.exit = true));
@@ -44,7 +44,7 @@ export const generateTopBar = (props: ITopBarProps, meta: any) => {
   useEffect(() => {
     let backHandler: any;
     if (!!isFocused) {
-      backHandler = BackHandler.addEventListener("hardwareBackPress", () => {
+      backHandler = BackHandler.addEventListener('hardwareBackPress', () => {
         onPressBack();
         return true;
       });

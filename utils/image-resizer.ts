@@ -1,5 +1,5 @@
-import * as ImageManipulator from "expo-image-manipulator";
-import { Image } from "react-native";
+import * as ImageManipulator from 'expo-image-manipulator';
+import {Alert, Image} from 'react-native';
 
 export interface IImageResizer {
   uri: string;
@@ -8,7 +8,7 @@ export interface IImageResizer {
 }
 
 export default (props: IImageResizer): Promise<string | null> => {
-  const { uri, actions, options } = props;
+  const {uri, actions, options} = props;
   return new Promise(async (resolve, reject) => {
     try {
       const success = async (w: number, h: number) => {
@@ -23,13 +23,13 @@ export default (props: IImageResizer): Promise<string | null> => {
         }
         await ImageManipulator.manipulateAsync(
           uri,
-          ([{ resize: { width, height } }] as any).concat(
-            actions || [{ resize: { width, height } }]
+          ([{resize: {width, height}}] as any).concat(
+            actions || [{resize: {width, height}}],
           ),
           Object.assign(
-            { compress: 0.7, format: ImageManipulator.SaveFormat.JPEG },
-            options
-          )
+            {compress: 0.7, format: ImageManipulator.SaveFormat.JPEG},
+            options,
+          ),
         )
           .then((resizedPhoto: any) => {
             resolve(resizedPhoto.uri);
@@ -37,21 +37,21 @@ export default (props: IImageResizer): Promise<string | null> => {
           .catch((error: any) => {
             let msg = error.message;
             if (!msg) {
-              msg = "Failed to compress image. Please try again.";
+              msg = 'Failed to compress image. Please try again.';
             }
-            alert(msg);
+            Alert.alert('Alert', msg);
             reject(uri);
           });
       };
-      Image.getSize(uri, success, (e) => {
+      Image.getSize(uri, success, e => {
         resolve(uri);
       });
     } catch (error) {
       let msg = error.message;
       if (!msg) {
-        msg = "Failed to compress image. Please try again.";
+        msg = 'Failed to compress image. Please try again.';
       }
-      alert(msg);
+      Alert.alert('Alert', msg);
       reject(uri);
     }
   });

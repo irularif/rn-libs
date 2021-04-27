@@ -1,6 +1,6 @@
-import get from "lodash.get";
-import { observer } from "mobx-react";
-import React, { ReactNode } from "react";
+import get from 'lodash.get';
+import {observer} from 'mobx-react';
+import React, {ReactNode} from 'react';
 import {
   KeyboardAvoidingView,
   KeyboardAvoidingViewProps,
@@ -9,8 +9,8 @@ import {
   ScrollViewProps,
   StyleSheet,
   ViewStyle,
-} from "react-native";
-import View from "../View";
+} from 'react-native';
+import View from '../View';
 
 export interface IContainerProps extends ScrollViewProps {
   children?: ReactNode;
@@ -21,7 +21,7 @@ export interface IContainerProps extends ScrollViewProps {
 }
 
 export default observer((props: IContainerProps) => {
-  const { style, scrollRef, alert, keyboardAvoidingProps, keyboardRef } = props;
+  const {style, scrollRef, alert, keyboardAvoidingProps, keyboardRef} = props;
   const baseStyle: ViewStyle = {
     flexGrow: 1,
   };
@@ -29,7 +29,7 @@ export default observer((props: IContainerProps) => {
   const cstyle = StyleSheet.flatten([
     baseStyle,
     style,
-    get(props, "contentContainerStyle", {}),
+    get(props, 'contentContainerStyle', {}),
   ]);
 
   return (
@@ -38,25 +38,23 @@ export default observer((props: IContainerProps) => {
       ref={keyboardRef}
       enabled={true}
       // if using inside tag Modal use 'padding'
-      behavior={Platform.OS == "ios" ? "padding" : "height"}
+      behavior={Platform.OS == 'ios' ? 'padding' : 'height'}
       style={{
         flexGrow: 1,
         flexShrink: 1,
       }}
-      {...keyboardAvoidingProps}
-    >
+      {...keyboardAvoidingProps}>
       {!!alert && (
         <View
           style={{
-            backgroundColor: "transparent",
-            position: "absolute",
+            backgroundColor: 'transparent',
+            position: 'absolute',
             zIndex: 99,
-          }}
-        >
+          }}>
           {alert()}
         </View>
       )}
-      {get(props, "scrollEnabled", true) === false ? (
+      {get(props, 'scrollEnabled', true) === false ? (
         <View {...props} style={cstyle} childRef={scrollRef} />
       ) : (
         <ScrollView
