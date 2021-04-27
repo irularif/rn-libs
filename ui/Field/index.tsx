@@ -1,17 +1,16 @@
 import { useTheme } from "@react-navigation/native";
-import { ITheme } from "../../config/theme";
+import { get } from "lodash";
 import { observer } from "mobx-react";
 import React, { ReactElement } from "react";
 import { StyleSheet, TextStyle, ViewStyle } from "react-native";
-import Checkbox from "../Checkbox";
+import { ITheme } from "../../config/theme";
 import Camera from "../Camera";
+import Checkbox from "../Checkbox";
 import ChoiceGroup from "../ChoiceGroup";
 import { IField as IFormField } from "../Form";
 import Text from "../Text";
 import View from "../View";
 import { generateInput } from "./generator";
-import { get } from "lodash";
-import DateTime from "../DateTime";
 
 export interface IField {
   label: string | ReactElement;

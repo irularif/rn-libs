@@ -80,7 +80,7 @@ export default observer((props: ICanvas) => {
 });
 
 const SignatureView = observer((props: any) => {
-  const { width, height, meta, signatureRef } = props;
+  const { width, height, meta, signatureRef, signatureProps } = props;
   if (!!meta.tempURI) {
     return (
       <Image
@@ -93,6 +93,8 @@ const SignatureView = observer((props: any) => {
       />
     );
   }
+
+  console.log(signatureProps);
 
   return (
     <SignatureScreen
@@ -119,7 +121,7 @@ const SignatureView = observer((props: any) => {
             margin-top: 0;
           }
           `}
-      {...props.signatureProps}
+      {...signatureProps}
       dataURL={meta.dataURI}
       onOK={props.onOk}
       onEnd={props.onEnd}

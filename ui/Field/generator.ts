@@ -1,4 +1,5 @@
 import get from "lodash.get";
+import { useEffect } from "react";
 import { IField } from ".";
 
 export const generateInput = (props: IField) => {
@@ -55,6 +56,12 @@ export const generateInput = (props: IField) => {
     value,
     onBlur: setBlur,
   };
+
+  useEffect(() => {
+    if (typeof initializeField?.setLabel === "function") {
+      initializeField.setLabel(path, label);
+    }
+  }, []);
 
   Input.props = inputProps;
   return Input;

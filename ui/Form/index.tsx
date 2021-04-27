@@ -2,14 +2,7 @@ import { useIsFocused, useTheme } from "@react-navigation/native";
 import get from "lodash.get";
 import isplainobject from "lodash.isplainobject";
 import set from "lodash.set";
-import {
-  isObservable,
-  isObservableArray,
-  reaction,
-  runInAction,
-  spy,
-  trace,
-} from "mobx";
+import { isObservableArray, reaction, runInAction } from "mobx";
 import { observer, useLocalObservable } from "mobx-react";
 import React, { ReactElement, useEffect } from "react";
 import * as Yup from "yup";
@@ -29,6 +22,7 @@ export interface ISubmit {
 }
 
 export interface IField {
+  setLabel?: (path: string, label: any) => void;
   onChangeValue?: (path: string, value: any) => void;
   onBlur?: (path: string) => void;
   onSubmit?: (params?: ISubmit) => void;
@@ -51,7 +45,11 @@ export interface IFromProps {
   onChange?: (path: string, value: any) => void;
   onSubmit?: (values: any, canSubmit?: boolean) => void;
   onError?: (fields: IError) => void;
-  Submit?: (handleSubmit: any, canSubmit?: boolean) => ReactElement | null;
+  Submit?: (
+    handleSubmit: any,
+    canSubmit?: boolean,
+    errors?: any
+  ) => ReactElement | null;
   hiddenSubmit?: boolean;
 }
 
@@ -68,11 +66,16 @@ export default observer((props: IFromProps) => {
     hiddenSubmit,
   } = props;
   const meta = useLocalObservable(() => ({
+    labels: {} as any,
     errors: {} as any,
     touched: {} as any,
     canSubmit: false,
   }));
   const isFocused = useIsFocused();
+
+  const setLabel = (path: string, label: string) => {
+    runInAction(() => (meta.labels[path] = label || path));
+  };
 
   const setBlur = (path: string) => {
     if (!meta.touched[path]) {
@@ -103,6 +106,7 @@ export default observer((props: IFromProps) => {
   };
 
   const state: IField = {
+    setLabel: setLabel,
     onChangeValue: setValue,
     onBlur: setBlur,
     onSubmit: handleSubmit,
@@ -184,8 +188,15 @@ export default observer((props: IFromProps) => {
 const RenderSubmit = observer((props: any) => {
   const { Submit, handleSubmit, meta, hiddenSubmit } = props;
   const { colors }: ITheme = useTheme() as any;
+  const getError = () => {
+    let errors: any = {};
+    Object.keys(meta.errors).map((path: any) => {
+      errors[meta.labels[path] || path] = meta.errors[path];
+    });
+    return errors;
+  };
   if (!!Submit) {
-    return Submit(handleSubmit, meta.canSubmit);
+    return Submit(handleSubmit, meta.canSubmit, getError());
   }
 
   if (!hiddenSubmit) {

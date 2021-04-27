@@ -24,7 +24,7 @@ export interface ISketchCanvas {
     thumbnail?: ImageStyle;
   };
   renderPreview?: (uri: string) => ReactElement;
-  canvasView?: ICanvas;
+  canvasView?: Partial<ICanvas>;
   placeholder?: string;
   prefixUri?: string;
 }
@@ -32,7 +32,7 @@ export interface ISketchCanvas {
 export default observer((props: ISketchCanvas) => {
   const { style, editable } = props;
   const meta = useLocalObservable(() => ({
-    visbleCameraView: false,
+    visbleCanvasView: false,
   }));
   const cprops = generateSketchCanvas(props, meta);
   const baseStyle: ViewStyle = {
@@ -116,18 +116,18 @@ const Preview = observer((props: any) => {
 });
 
 const CameraSegment = observer((props: any) => {
-  const { setSource, meta, cameraView, source } = props;
+  const { setSource, meta, canvasView, source } = props;
 
-  if (!meta.visbleCameraView) return null;
+  if (!meta.visbleCanvasView) return null;
 
   return (
     <Canvas
       withCompress
-      {...cameraView}
-      visible={meta.visbleCameraView}
+      {...canvasView}
+      visible={meta.visbleCanvasView}
       setVisible={(visible: boolean) => {
         runInAction(() => {
-          meta.visbleCameraView = !visible;
+          meta.visbleCanvasView = !visible;
         });
       }}
       source={source?.uri}

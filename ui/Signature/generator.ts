@@ -54,7 +54,7 @@ export const generateSketchCanvas = (props: ISketchCanvas, meta: any) => {
 
   const switchCameraView = () => {
     runInAction(() => {
-      meta.visbleCameraView = !meta.visbleCameraView;
+      meta.visbleCanvasView = !meta.visbleCanvasView;
     });
   };
 
@@ -88,7 +88,7 @@ export const generateCanvasView = (
     height = dim.height;
 
   // Canvas Props
-  const signatureProps: any = { ...props, ...libsStorage.camera._json };
+  const signatureProps: any = { ...props };
   if (!!signatureProps.canvasRef) delete signatureProps.canvasRef;
   if (!!signatureProps.visible) delete signatureProps.visible;
   if (!!signatureProps.setVisible) delete signatureProps.setVisible;
