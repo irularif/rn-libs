@@ -1,7 +1,7 @@
-import { useTheme } from "@react-navigation/native";
-import { ITheme } from "../../config/theme";
-import { useLocalObservable } from "mobx-react";
-import React, { ReactElement, useEffect } from "react";
+import {useTheme} from '@react-navigation/native';
+import {ITheme} from '../../config/theme';
+import {useLocalObservable} from 'mobx-react';
+import React, {ReactElement, useEffect} from 'react';
 import {
   BackHandler,
   Platform,
@@ -9,13 +9,13 @@ import {
   TextStyle,
   ViewProps,
   ViewStyle,
-} from "react-native";
-import Button from "../Button";
-import Icon, { IIcon } from "../Icon";
-import { statusBarHeight } from "../Screen";
-import Text from "../Text";
-import View from "../View";
-import { generateTopBar } from "./generator";
+} from 'react-native';
+import Button from '../Button';
+import Icon, {IIcon} from '../Icon';
+import {statusBarHeight} from '../Screen';
+import Text from '../Text';
+import View from '../View';
+import {generateTopBar} from './generator';
 
 export interface ITopBarProps extends ViewProps {
   backButton?: boolean;
@@ -52,8 +52,8 @@ export default (props: ITopBarProps) => {
 
   const baseStyle: ViewStyle = {
     paddingTop: 8 + statusBarHeight,
-    flexDirection: "row",
-    alignItems: "center",
+    flexDirection: 'row',
+    alignItems: 'center',
     minHeight: 56 + statusBarHeight,
     backgroundColor: Theme.colors.primary,
     zIndex: 9,
@@ -66,7 +66,7 @@ export default (props: ITopBarProps) => {
       margin: 0,
       marginHorizontal: 5,
       paddingHorizontal: 5,
-      justifyContent: "flex-start",
+      justifyContent: 'flex-start',
     },
     styles?.backButton,
   ]);
@@ -74,8 +74,8 @@ export default (props: ITopBarProps) => {
     {
       lineHeight: 30,
       fontSize: 18,
-      color: "white",
-      overflow: "hidden",
+      color: 'white',
+      overflow: 'hidden',
       flexGrow: 1,
     },
     styles?.title,
@@ -86,7 +86,7 @@ export default (props: ITopBarProps) => {
       {backButton && (
         <Button mode="clean" style={backButtonStyle} onPress={onPressBack}>
           <Icon
-            name={`${Platform.OS === "ios" ? "ios" : "md"}-arrow-back`}
+            name={`${Platform.OS === 'ios' ? 'ios' : 'md'}-arrow-back`}
             size={24}
             style={StyleSheet.flatten([
               {
@@ -100,8 +100,8 @@ export default (props: ITopBarProps) => {
         </Button>
       )}
       {leftAction}
-      {typeof children === "string" ? (
-        <Text ellipsizeMode={"tail"} numberOfLines={1} style={titleStyle}>
+      {typeof children === 'string' ? (
+        <Text ellipsizeMode={'tail'} numberOfLines={1} style={titleStyle}>
           {children}
         </Text>
       ) : (

@@ -1,4 +1,4 @@
-import debounce from "lodash.debounce";
+import debounce from 'lodash.debounce';
 import {
   action,
   autorun,
@@ -8,10 +8,10 @@ import {
   observable,
   runInAction,
   toJS,
-} from "mobx";
-import * as JSLZString from "lz-string";
-import AsyncStorage from "@react-native-async-storage/async-storage";
-import { decrypt, encrypt, generateKey } from "../utils/encrypt-aes";
+} from 'mobx';
+import * as JSLZString from 'lz-string';
+import AsyncStorage from '@react-native-async-storage/async-storage';
+import {decrypt, encrypt, generateKey} from '../utils/encrypt-aes';
 
 export interface ModelOptions {
   localStorage?: boolean;
@@ -38,8 +38,8 @@ export abstract class Model {
   public _parent?: Model;
 
   public static create<T extends Model>(
-    this: { new (): T },
-    options?: ModelOptions
+    this: {new (): T},
+    options?: ModelOptions,
   ) {
     const obj: T = new this();
     if (options) {
@@ -49,14 +49,14 @@ export abstract class Model {
 
     return obj;
   }
-  public static childOf<T extends Model>(this: { new (): T }, parent: Model) {
+  public static childOf<T extends Model>(this: {new (): T}, parent: Model) {
     const obj: T = new this();
     obj._parent = parent;
 
     return obj;
   }
 
-  public static hasMany<T extends Model>(this: { new (): T }, parent: Model) {
+  public static hasMany<T extends Model>(this: {new (): T}, parent: Model) {
     const c = this;
     const arr: T[] = new ArrayModel<T>(c, parent);
 
@@ -70,14 +70,14 @@ export abstract class Model {
     const obj = {} as any;
 
     for (let i of Object.getOwnPropertyNames(self)) {
-      if (i.indexOf("_") === 0) continue;
+      if (i.indexOf('_') === 0) continue;
 
       const val = (self as any)[i];
       let isObservable = true;
       const type = getType(val);
 
       if (!!type) {
-        if (type === "ArrayModel") {
+        if (type === 'ArrayModel') {
           self._arrClass[i] = [val._model, val._parent];
         } else if (val instanceof Model) {
           val._initMobx(val);
@@ -92,8 +92,8 @@ export abstract class Model {
 
     const methods = Object.getOwnPropertyNames(Object.getPrototypeOf(self));
     for (let i of methods) {
-      if (i !== "constructor" && i.indexOf("_") !== 0) {
-        if (typeof (self as any)[i] === "function") {
+      if (i !== 'constructor' && i.indexOf('_') !== 0) {
+        if (typeof (self as any)[i] === 'function') {
           obj[i] = action;
         } else {
           obj[i] = computed;
@@ -127,16 +127,16 @@ export abstract class Model {
     for (let i of Object.getOwnPropertyNames(self)) {
       if (
         except.indexOf(i) > -1 ||
-        i.indexOf("_") === 0 ||
-        i === "constructor" ||
-        typeof self[i] === "function"
+        i.indexOf('_') === 0 ||
+        i === 'constructor' ||
+        typeof self[i] === 'function'
       ) {
         continue;
       }
 
       if (self[i] instanceof Model) {
         result[i] = self[i]._json;
-      } else if (typeof self[i] === "object") {
+      } else if (typeof self[i] === 'object') {
         if (Array.isArray(self[i])) {
           let res = self[i].map((x: any) => {
             if (x instanceof Model) {
@@ -165,9 +165,9 @@ export abstract class Model {
       selfKey: string,
       newValue: any,
       oldValue: any,
-      processValue?: (newValue: any, oldValue: any, key?: string) => any
+      processValue?: (newValue: any, oldValue: any, key?: string) => any,
     ) => {
-      if (!!processValue && typeof processValue === "function") {
+      if (!!processValue && typeof processValue === 'function') {
         return processValue(newValue, oldValue, selfKey);
       }
       return parseValue(oldValue, newValue);
@@ -179,9 +179,9 @@ export abstract class Model {
         let valueMeta: any = undefined;
         if (
           except.indexOf(key) > -1 ||
-          selfKey.indexOf("_") === 0 ||
-          selfKey === "constructor" ||
-          typeof self[selfKey] === "function"
+          selfKey.indexOf('_') === 0 ||
+          selfKey === 'constructor' ||
+          typeof self[selfKey] === 'function'
         ) {
           continue;
         }
@@ -203,13 +203,13 @@ export abstract class Model {
           continue;
         }
 
-        if (typeof self[selfKey] !== "object") {
+        if (typeof self[selfKey] !== 'object') {
           runInAction(() => {
             self[selfKey] = applyValue(
               selfKey,
               value[key],
               self[selfKey],
-              valueMeta
+              valueMeta,
             );
           });
         } else {
@@ -219,7 +219,7 @@ export abstract class Model {
                 let model = this._arrClass[selfKey][0];
                 let parent = this._arrClass[selfKey][1];
 
-                return newVal.map((item) => {
+                return newVal.map(item => {
                   let newItem = model.create();
                   newItem._parent = parent;
                   if (item instanceof Model) {
@@ -234,8 +234,8 @@ export abstract class Model {
             if (!!value[key] && !!self[selfKey].replace) {
               runInAction(() =>
                 self[selfKey].replace(
-                  applyValue(selfKey, value[key], self[selfKey], valueMeta)
-                )
+                  applyValue(selfKey, value[key], self[selfKey], valueMeta),
+                ),
               );
 
               // if (selfKey === "complements" || selfKey === "product")
@@ -243,7 +243,7 @@ export abstract class Model {
             }
           } else if (self[selfKey] instanceof Model) {
             self[selfKey]._loadJSON(
-              applyValue(selfKey, value[key], self[selfKey], valueMeta)
+              applyValue(selfKey, value[key], self[selfKey], valueMeta),
             );
             if (!self[selfKey]._parent) {
               self[selfKey]._parent = self;
@@ -254,7 +254,7 @@ export abstract class Model {
                 selfKey,
                 value[key],
                 self[selfKey],
-                valueMeta
+                valueMeta,
               );
             });
           }
@@ -270,13 +270,13 @@ export abstract class Model {
     try {
       const key = await generateKey(options?.secretKey);
       let storeName = options?.storageName;
-      let dataStr: any = "";
+      let dataStr: any = '';
       if (!!storeName) {
         dataStr = await AsyncStorage.getItem(storeName);
       } else {
-        Error("Storage Name is required for saving to local storage");
+        Error('Storage Name is required for saving to local storage');
       }
-      dataStr = !!dataStr ? JSLZString.decompressFromBase64(dataStr) : "";
+      dataStr = !!dataStr ? JSLZString.decompressFromBase64(dataStr) : '';
       let content: any = dataStr;
       if (!!options?.encrypt && !!content) {
         content = await decrypt(JSON.parse(content), key);
@@ -303,45 +303,45 @@ export abstract class Model {
         if (!!storeName) {
           AsyncStorage.setItem(storeName, str);
         } else {
-          Error("Storage Name is required for saving to local storage");
+          Error('Storage Name is required for saving to local storage');
         }
       } catch (e) {
         console.log(e);
       }
     },
     500,
-    { trailing: true }
+    {trailing: true},
   );
 }
 
 const getType = (val: any) => {
-  if (!!val && typeof val === "object") {
+  if (!!val && typeof val === 'object') {
     if (val instanceof Model) {
-      return "Model";
+      return 'Model';
     } else if (val instanceof ArrayModel) {
-      return "ArrayModel";
+      return 'ArrayModel';
     }
   }
   return typeof val;
 };
 
 const isNull = (val: any) => {
-  return val === null || val === undefined;
+  return val === null || val === undefined || val === '';
 };
 
 const parseValue = (oval: any, nval: any) => {
   if (!isNull(oval)) {
     switch (typeof oval) {
-      case "number":
+      case 'number':
         return !isNull(nval) ? Number(nval) : nval;
-      case "boolean":
+      case 'boolean':
         return !isNull(nval) ? Boolean(nval) : nval;
-      case "string":
-        if (!isNull(nval) && typeof nval === "object")
+      case 'string':
+        if (!isNull(nval) && typeof nval === 'object')
           return JSON.stringify(nval);
         return !isNull(nval) ? String(nval) : nval;
-      case "object":
-        if (!isNull(nval) && typeof nval === "string") return JSON.parse(nval);
+      case 'object':
+        if (!isNull(nval) && typeof nval === 'string') return JSON.parse(nval);
         return nval;
       default:
         return nval;
