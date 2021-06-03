@@ -1,4 +1,4 @@
-import get from 'lodash.get';
+import {get} from 'lodash';
 import {observer} from 'mobx-react';
 import React, {ReactNode} from 'react';
 import {
