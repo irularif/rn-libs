@@ -1,15 +1,15 @@
-import { useTheme } from "@react-navigation/native";
-import { ITheme } from "../../config/theme";
-import get from "lodash.get";
-import React from "react";
+import {useTheme} from '@react-navigation/native';
+import {ITheme} from '../../config/theme';
+import {get} from 'lodash';
+import React from 'react';
 import {
   StyleSheet,
   TextStyle,
   TouchableOpacity,
   TouchableOpacityProps,
   ViewStyle,
-} from "react-native";
-import Text from "../Text";
+} from 'react-native';
+import Text from '../Text';
 
 interface IStyles {
   disabled?: ViewStyle;
@@ -18,9 +18,9 @@ interface IStyles {
 
 export interface IButtonProps extends TouchableOpacityProps {
   shadow?: Boolean;
-  type?: "Submit" | string;
+  type?: 'Submit' | string;
   children?: any;
-  mode?: "contained" | "outlined" | "clean";
+  mode?: 'contained' | 'outlined' | 'clean';
   styles?: IStyles;
   label?: string;
   style?: ViewStyle;
@@ -31,13 +31,13 @@ export default (props: IButtonProps) => {
   const {
     disabled,
     shadow,
-    mode = "contained",
+    mode = 'contained',
     children,
     label,
     disableOpacity,
   } = props;
   const Theme: ITheme = useTheme() as any;
-  const cprops = { ...props };
+  const cprops = {...props};
   delete cprops.styles;
   const disabledStyle = StyleSheet.flatten([
     {
@@ -51,18 +51,18 @@ export default (props: IButtonProps) => {
   };
   const outlinedStyle: ViewStyle = {
     borderWidth: 1,
-    borderStyle: "solid",
+    borderStyle: 'solid',
     borderColor: Theme.colors.primary,
-    backgroundColor: "transparent",
+    backgroundColor: 'transparent',
   };
   const cleanStyle: ViewStyle = {
-    backgroundColor: "transparent",
+    backgroundColor: 'transparent',
   };
   const cstyle: ViewStyle = StyleSheet.flatten([
     {
-      flexDirection: "row",
-      alignItems: "center",
-      justifyContent: "center",
+      flexDirection: 'row',
+      alignItems: 'center',
+      justifyContent: 'center',
       borderRadius: 4,
       padding: 16,
       paddingVertical: 8,
@@ -70,9 +70,9 @@ export default (props: IButtonProps) => {
     },
     shadowStyle,
     Theme.styles?.button,
-    mode === "outlined"
+    mode === 'outlined'
       ? outlinedStyle
-      : mode === "clean"
+      : mode === 'clean'
       ? cleanStyle
       : containedStyle,
     props?.style,
@@ -82,7 +82,7 @@ export default (props: IButtonProps) => {
   return (
     <TouchableOpacity activeOpacity={0.6} {...cprops} style={cstyle}>
       {!children && !!label ? (
-        <Text style={get(props, "styles.label", {})}>{label}</Text>
+        <Text style={get(props, 'styles.label', {})}>{label}</Text>
       ) : (
         children
       )}

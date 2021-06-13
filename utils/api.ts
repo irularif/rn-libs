@@ -1,5 +1,5 @@
-import axios, { AxiosRequestConfig } from "axios";
-import get from "lodash.get";
+import axios, {AxiosRequestConfig} from 'axios';
+import {get} from 'lodash';
 
 export interface IAPI extends AxiosRequestConfig {
   onError?: (res: any) => void;
@@ -22,9 +22,9 @@ const Axios = axios.create({
 const api = async (e: IAPI) => {
   let url = e.url;
   const headers = {
-    Accept: "application/json",
-    "Content-Type": "application/json",
-    ...get(e, "headers", {}),
+    Accept: 'application/json',
+    'Content-Type': 'application/json',
+    ...get(e, 'headers', {}),
   };
   let onError: any;
   if (e.onError) {
@@ -32,7 +32,7 @@ const api = async (e: IAPI) => {
   }
   return new Promise(async (resolve, reject) => {
     try {
-      const res = await Axios({ ...e, url, headers });
+      const res = await Axios({...e, url, headers});
       if (res.status >= 200 && res.status < 300) {
         if (!!res.data) resolve(res.data);
         else resolve(res);

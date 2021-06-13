@@ -1,7 +1,5 @@
 import {useIsFocused, useTheme} from '@react-navigation/native';
-import get from 'lodash.get';
-import isplainobject from 'lodash.isplainobject';
-import set from 'lodash.set';
+import {get, set, isPlainObject} from 'lodash';
 import {isObservableArray, reaction, runInAction} from 'mobx';
 import {observer, useLocalObservable} from 'mobx-react';
 import React, {ReactElement, useEffect} from 'react';
@@ -234,13 +232,13 @@ const prepareDataForValidation = (values: any) => {
 
       if (Array.isArray(values[key]) === true) {
         data[key] = values[key].map(function (value: any) {
-          if (Array.isArray(value) === true || isplainobject(value)) {
+          if (Array.isArray(value) === true || isPlainObject(value)) {
             return prepareDataForValidation(value);
           } else {
             return value !== '' ? value : undefined;
           }
         });
-      } else if (isplainobject(values[key])) {
+      } else if (isPlainObject(values[key])) {
         data[key] = prepareDataForValidation(values[key]);
       } else {
         data[key] = values[key] !== '' ? values[key] : undefined;
