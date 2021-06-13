@@ -1,6 +1,6 @@
 import * as Location from 'expo-location';
 import {Alert, Platform} from 'react-native';
-import {Constants, Permissions} from 'react-native-unimodules';
+import {Constants} from 'react-native-unimodules';
 
 export interface ILocation {
   latitude: number;
@@ -21,8 +21,8 @@ const getCurrentLocation = (): Promise<ILocation | null> => {
       );
       resolve(null);
     }
-    Permissions.askAsync(Permissions.LOCATION).then(res => {
-      if (res.status == 'granted') {
+    Location.getForegroundPermissionsAsync().then(res => {
+      if (res.granted) {
         Location.getCurrentPositionAsync({
           accuracy: 4,
         }).then(location => {

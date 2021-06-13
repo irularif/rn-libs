@@ -37,6 +37,8 @@ export abstract class Model {
   private _arrClass: any = {};
   public _parent?: Model;
 
+  // TODO: optional child observer
+
   public static create<T extends Model>(
     this: {new (): T},
     options?: ModelOptions,
@@ -198,8 +200,7 @@ export abstract class Model {
             }
           }
         }
-
-        if (value[key] === undefined) {
+        if (!value || value[key] === undefined) {
           continue;
         }
 
@@ -264,6 +265,44 @@ export abstract class Model {
       console.log(error);
     }
     return this;
+  }
+
+  private get _jsonCached() {
+    const result: any = {};
+    const self: any = this;
+    const except = Object.getOwnPropertyNames(Object.getPrototypeOf(self));
+
+    for (let i of Object.getOwnPropertyNames(self)) {
+      if (
+        except.indexOf(i) > -1 ||
+        i.indexOf('_') === 0 ||
+        i === 'constructor' ||
+        typeof self[i] === 'function'
+      ) {
+        continue;
+      }
+
+      if (self[i] instanceof Model) {
+        result[i] = self[i]._jsonCached;
+      } else if (typeof self[i] === 'object') {
+        if (Array.isArray(self[i])) {
+          let res = self[i].map((x: any) => {
+            if (x instanceof Model) {
+              x = x._jsonCached;
+            } else if (isObservable(x)) {
+              x = toJS(x);
+            }
+            return x;
+          });
+          result[i] = res;
+        } else {
+          result[i] = toJS(self[i]);
+        }
+      } else {
+        result[i] = self[i];
+      }
+    }
+    return result;
   }
 
   private async _loadFromLocalStorage(self: any, options: ModelOptions) {

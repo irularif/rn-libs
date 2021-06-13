@@ -1,23 +1,23 @@
-import { useTheme } from "@react-navigation/native";
-import { ITheme } from "../../config/theme";
-import { observer, useLocalObservable } from "mobx-react";
-import React, { useRef, useState } from "react";
-import { StyleSheet, TextInput, TextInputProps } from "react-native";
-import Button from "../Button";
-import Icon from "../Icon";
-import { runInAction, toJS } from "mobx";
-import { mask, unmask } from "../../utils/string-masking";
+import {useTheme} from '@react-navigation/native';
+import {ITheme} from '../../config/theme';
+import {observer, useLocalObservable} from 'mobx-react';
+import React, {useRef, useState} from 'react';
+import {StyleSheet, TextInput, TextInputProps} from 'react-native';
+import Button from '../Button';
+import Icon from '../Icon';
+import {runInAction, toJS} from 'mobx';
+import {mask, unmask} from '../../utils/string-masking';
 
 export type IInputType =
-  | "text"
-  | "number"
-  | "password"
-  | "decimal"
-  | "multiline"
-  | "currency"
-  | "email"
-  | "float"
-  | "mask";
+  | 'text'
+  | 'number'
+  | 'password'
+  | 'decimal'
+  | 'multiline'
+  | 'currency'
+  | 'email'
+  | 'float'
+  | 'mask';
 
 export interface ITextInput extends TextInputProps {
   type: IInputType;
@@ -40,7 +40,7 @@ export default observer((props: ITextInput) => {
   const originalType = useRef(type);
   const Theme: ITheme = useTheme() as any;
   const pattern = p;
-  const inpLength = pattern?.replace(/[^_]/g, "").length;
+  const inpLength = pattern?.replace(/[^_]/g, '').length;
   const meta = useLocalObservable(() => ({
     start: 0,
     end: 0,
@@ -49,23 +49,23 @@ export default observer((props: ITextInput) => {
   const setValue = (text: any) => {
     let v;
     switch (type || originalType.current) {
-      case "number":
-        let b = text.replace(/[^0-9]/g, "");
-        v = b || "";
+      case 'number':
+        let b = text.replace(/[^0-9]/g, '');
+        v = b || '';
         break;
-      case "decimal":
-        let c = text.replace(/[^0-9]/g, "");
-        v = parseInt(c || "0");
+      case 'decimal':
+        let c = text.replace(/[^0-9]/g, '');
+        v = parseInt(c || '0');
         break;
-      case "currency":
-        let a = text.replace(/[^0-9]/g, "");
-        v = parseInt(a || "0");
+      case 'currency':
+        let a = text.replace(/[^0-9]/g, '');
+        v = parseInt(a || '0');
         break;
-      case "email":
-        v = text.replace(/\s/g, "");
+      case 'email':
+        v = text.replace(/\s/g, '');
         break;
-      case "float":
-        v = text.replace(/[^0-9.,]/g, "");
+      case 'float':
+        v = text.replace(/[^0-9.,]/g, '');
         break;
       default:
         v = text;
@@ -78,7 +78,7 @@ export default observer((props: ITextInput) => {
   const onKeyPress = (e: any) => {
     const key = e.nativeEvent.key;
     let pos = meta.start;
-    if (key === "Backspace") {
+    if (key === 'Backspace') {
       pos -= 1;
     } else {
       pos += 1;
@@ -107,7 +107,7 @@ export default observer((props: ITextInput) => {
   const cstyle = StyleSheet.flatten([
     {
       flex: 1,
-      backgroundColor: "transparent",
+      backgroundColor: 'transparent',
       color: Theme.colors.text,
       paddingVertical: 8,
       fontSize: Theme.fontSize.h6,
@@ -120,33 +120,33 @@ export default observer((props: ITextInput) => {
     style,
   ]);
   let ComponentProps: any = {
-    returnKeyType: "next",
+    returnKeyType: 'next',
     ...cprops,
     style: cstyle,
-    value: !!value ? String(value) : "",
+    value: !!value ? String(value) : '',
   };
 
   let Component = TextInput;
 
   switch (type) {
-    case "password":
+    case 'password':
       ComponentProps = {
         ...ComponentProps,
         secureTextEntry: secure,
       };
       break;
-    case "float":
-    case "decimal":
-    case "number":
+    case 'float':
+    case 'decimal':
+    case 'number':
       ComponentProps = {
-        keyboardType: "number-pad",
+        keyboardType: 'number-pad',
         ...ComponentProps,
         value: ComponentProps.value.toString(),
       };
       break;
-    case "multiline":
+    case 'multiline':
       ComponentProps = {
-        textAlignVertical: "top",
+        textAlignVertical: 'top',
         numberOfLines: 4,
         ...ComponentProps,
         multiline: true,
@@ -157,23 +157,23 @@ export default observer((props: ITextInput) => {
         },
       };
       break;
-    case "currency":
+    case 'currency':
       ComponentProps = {
         ...ComponentProps,
         value: ComponentProps.value
           .toString()
-          .replace(/,/g, "")
-          .replace(/\B(?=(\d{3})+(?!\d))/g, ","),
-        keyboardType: "number-pad",
+          .replace(/,/g, '')
+          .replace(/\B(?=(\d{3})+(?!\d))/g, ','),
+        keyboardType: 'number-pad',
       };
       break;
-    case "email":
+    case 'email':
       ComponentProps = {
-        keyboardType: "email-address",
+        keyboardType: 'email-address',
         ...ComponentProps,
       };
       break;
-    case "mask":
+    case 'mask':
       let v = !!pattern
         ? !!value
           ? mask(value, pattern).result
@@ -185,16 +185,15 @@ export default observer((props: ITextInput) => {
         selection: toJS(meta),
         max: pattern?.length,
       };
-      console.log("asd", v);
       break;
   }
   return (
     <>
       <Component {...ComponentProps} />
-      {type === "password" && (
+      {type === 'password' && (
         <Button
           style={{
-            backgroundColor: "transparent",
+            backgroundColor: 'transparent',
             paddingHorizontal: 10,
             paddingVertical: 0,
             margin: 0,
@@ -202,10 +201,9 @@ export default observer((props: ITextInput) => {
           }}
           onPress={() => {
             setsecure(!secure);
-          }}
-        >
+          }}>
           <Icon
-            name={!!secure ? "ios-eye" : "ios-eye-off"}
+            name={!!secure ? 'ios-eye' : 'ios-eye-off'}
             color={Theme.colors.text}
           />
         </Button>

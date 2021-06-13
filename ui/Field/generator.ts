@@ -1,6 +1,6 @@
-import get from "lodash.get";
-import { useEffect } from "react";
-import { IField } from ".";
+import get from 'lodash.get';
+import {useEffect} from 'react';
+import {IField} from '.';
 
 export const generateInput = (props: IField) => {
   const {
@@ -22,7 +22,7 @@ export const generateInput = (props: IField) => {
         value = nv;
       }
     }
-    if (typeof initializeField?.onChangeValue === "function") {
+    if (typeof initializeField?.onChangeValue === 'function') {
       initializeField.onChangeValue(path, value);
     }
     if (!!onChange) {
@@ -30,24 +30,24 @@ export const generateInput = (props: IField) => {
     }
   };
   const setBlur = () => {
-    if (typeof initializeField?.onBlur === "function") {
+    if (typeof initializeField?.onBlur === 'function') {
       initializeField.onBlur(path);
     }
     if (!!onBlur) {
       onBlur();
     }
   };
-  let value: any = "";
+  let value: any = '';
   if (
     !!initializeField?.values &&
-    !isNull(get(initializeField.values, path, ""))
+    !isNull(get(initializeField.values, path, ''))
   ) {
-    value = get(initializeField.values, path, "");
+    value = get(initializeField.values, path, '');
   }
   if (!isNull(ovValue)) {
     value = ovValue;
   }
-  const Input = { ...children };
+  const Input = {...children};
   const inputProps = {
     label,
     editable,
@@ -58,7 +58,7 @@ export const generateInput = (props: IField) => {
   };
 
   useEffect(() => {
-    if (typeof initializeField?.setLabel === "function") {
+    if (typeof initializeField?.setLabel === 'function') {
       initializeField.setLabel(path, label);
     }
   }, []);

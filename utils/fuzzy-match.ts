@@ -10,20 +10,23 @@ const findLargestSmallest = (a: string, b: string) =>
       };
 
 const fuzzyMatch = (strA: string, strB: string, fuzziness = 0) => {
-  if (strA === "" || strB === "") {
+  if (strA === '' || strB === '') {
     return false;
   }
 
   if (strA === strB) return true;
 
-  const { largest, smallest } = findLargestSmallest(strA, strB);
+  const {largest, smallest} = findLargestSmallest(strA, strB);
   const maxIters = largest.length - smallest.length;
   const minMatches = smallest.length - fuzziness;
 
-  for (let i = 0; i < maxIters; i++) {
+  for (let i = 0; i <= maxIters; i++) {
     let matches = 0;
     for (let smIdx = 0; smIdx < smallest.length; smIdx++) {
-      if (smallest[smIdx] === largest[smIdx + i]) {
+      if (
+        smIdx + i < largest.length &&
+        smallest[smIdx] === largest[smIdx + i]
+      ) {
         matches++;
       }
     }

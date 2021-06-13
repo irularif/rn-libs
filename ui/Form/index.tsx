@@ -1,16 +1,16 @@
-import { useIsFocused, useTheme } from "@react-navigation/native";
-import get from "lodash.get";
-import isplainobject from "lodash.isplainobject";
-import set from "lodash.set";
-import { isObservableArray, reaction, runInAction } from "mobx";
-import { observer, useLocalObservable } from "mobx-react";
-import React, { ReactElement, useEffect } from "react";
-import * as Yup from "yup";
-import { ObjectShape } from "yup/lib/object";
-import Fonts from "../../assets/fonts";
-import { ITheme } from "../../config/theme";
-import Button from "../Button";
-import Text from "../Text";
+import {useIsFocused, useTheme} from '@react-navigation/native';
+import get from 'lodash.get';
+import isplainobject from 'lodash.isplainobject';
+import set from 'lodash.set';
+import {isObservableArray, reaction, runInAction} from 'mobx';
+import {observer, useLocalObservable} from 'mobx-react';
+import React, {ReactElement, useEffect} from 'react';
+import * as Yup from 'yup';
+import {ObjectShape} from 'yup/lib/object';
+import Fonts from '../../assets/fonts';
+import {ITheme} from '../../config/theme';
+import Button from '../Button';
+import Text from '../Text';
 
 export interface IError {
   [k: string]: string;
@@ -48,7 +48,7 @@ export interface IFromProps {
   Submit?: (
     handleSubmit: any,
     canSubmit?: boolean,
-    errors?: any
+    errors?: any,
   ) => ReactElement | null;
   hiddenSubmit?: boolean;
 }
@@ -85,7 +85,7 @@ export default observer((props: IFromProps) => {
   };
 
   const setValue = async (path: string, value: any) => {
-    if (typeof onChange == "function") {
+    if (typeof onChange == 'function') {
       onChange(path, value);
     } else {
       runInAction(() => {
@@ -128,14 +128,14 @@ export default observer((props: IFromProps) => {
           .validate(validateData, {
             abortEarly: false,
           })
-          .catch((e) => {
-            if (e.name === "ValidationError") {
+          .catch(e => {
+            if (e.name === 'ValidationError') {
               err = yupToFormErrors(e);
             } else {
               // We throw any other errors
               console.warn(
-                "Warning: An unhandled error was caught during validation in <Formik validationSchema />",
-                err
+                'Warning: An unhandled error was caught during validation in <Formik validationSchema />',
+                err,
               );
             }
           });
@@ -153,13 +153,13 @@ export default observer((props: IFromProps) => {
 
   const checkArray = () => {
     let keys = Object.keys(values);
-    keys.map((item) => {
+    keys.map(item => {
       if (isObservableArray(values[item])) {
         reaction(
           () => values[item].length,
           () => {
             validate();
-          }
+          },
         );
       }
     });
@@ -186,8 +186,8 @@ export default observer((props: IFromProps) => {
 });
 
 const RenderSubmit = observer((props: any) => {
-  const { Submit, handleSubmit, meta, hiddenSubmit } = props;
-  const { colors }: ITheme = useTheme() as any;
+  const {Submit, handleSubmit, meta, hiddenSubmit} = props;
+  const {colors}: ITheme = useTheme() as any;
   const getError = () => {
     let errors: any = {};
     Object.keys(meta.errors).map((path: any) => {
@@ -208,16 +208,14 @@ const RenderSubmit = observer((props: any) => {
           paddingVertical: 12,
         }}
         onPress={handleSubmit}
-        disabled={meta.canSubmit}
-      >
+        disabled={meta.canSubmit}>
         <Text
           style={{
             color: colors.textLight,
             fontSize: 16,
             fontFamily: Fonts.Roboto,
-            fontWeight: "bold",
-          }}
-        >
+            fontWeight: 'bold',
+          }}>
           SAVE
         </Text>
       </Button>
@@ -239,13 +237,13 @@ const prepareDataForValidation = (values: any) => {
           if (Array.isArray(value) === true || isplainobject(value)) {
             return prepareDataForValidation(value);
           } else {
-            return value !== "" ? value : undefined;
+            return value !== '' ? value : undefined;
           }
         });
       } else if (isplainobject(values[key])) {
         data[key] = prepareDataForValidation(values[key]);
       } else {
-        data[key] = values[key] !== "" ? values[key] : undefined;
+        data[key] = values[key] !== '' ? values[key] : undefined;
       }
     }
   }

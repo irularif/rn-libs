@@ -1,19 +1,19 @@
-import { observer, useLocalObservable } from "mobx-react";
-import React, { MutableRefObject, useRef } from "react";
-import Modal from "../Modal";
-import { generateCanvasView } from "./generator";
-import View from "../View";
-import { Dimensions } from "react-native";
-import SignatureScreen from "react-native-signature-canvas";
-import useTheme from "libs/hooks/useTheme";
-import Button from "../Button";
-import Icon from "../Icon";
-import Image from "../Image";
-import { FileSystem } from "react-native-unimodules";
+import {observer, useLocalObservable} from 'mobx-react';
+import React, {MutableRefObject, useRef} from 'react';
+import Modal from '../Modal';
+import {generateCanvasView} from './generator';
+import View from '../View';
+import {Dimensions} from 'react-native';
+import SignatureScreen from 'react-native-signature-canvas';
+import useTheme from 'libs/hooks/useTheme';
+import Button from '../Button';
+import Icon from '../Icon';
+import Image from '../Image';
+import {FileSystem} from 'react-native-unimodules';
 
-type ImageType = "image/jpeg" | "image/svg+xml";
+type ImageType = 'image/jpeg' | 'image/svg+xml';
 
-type DataURL = "Base64";
+type DataURL = 'Base64';
 
 export type SignatureViewProps = {
   webStyle?: string;
@@ -47,12 +47,12 @@ export interface ICanvas extends SignatureViewProps {
 }
 
 export default observer((props: ICanvas) => {
-  const { visible } = props;
-  const dim = Dimensions.get("window");
+  const {visible} = props;
+  const dim = Dimensions.get('window');
   const signatureRef = useRef(null);
   const meta = useLocalObservable(() => ({
-    tempURI: "",
-    dataURI: "",
+    tempURI: '',
+    dataURI: '',
     loading: false,
   }));
   const cprops = generateCanvasView(props, meta, signatureRef);
@@ -61,17 +61,15 @@ export default observer((props: ICanvas) => {
     <Modal
       visible={visible}
       onDismiss={cprops.onDismiss}
-      onRequestClose={cprops.onDismiss}
-    >
+      onRequestClose={cprops.onDismiss}>
       <View
         style={{
-          backgroundColor: "#fff",
+          backgroundColor: '#fff',
           flex: 1,
-          justifyContent: "center",
-          alignItems: "center",
+          justifyContent: 'center',
+          alignItems: 'center',
           width: dim.width,
-        }}
-      >
+        }}>
         <SignatureView {...cprops} />
         <ActionGroupBottom {...cprops} />
       </View>
@@ -80,11 +78,11 @@ export default observer((props: ICanvas) => {
 });
 
 const SignatureView = observer((props: any) => {
-  const { width, height, meta, signatureRef, signatureProps } = props;
+  const {width, height, meta, signatureRef, signatureProps} = props;
   if (!!meta.tempURI) {
     return (
       <Image
-        source={{ uri: meta.tempURI }}
+        source={{uri: meta.tempURI}}
         style={{
           width,
           height,
@@ -93,8 +91,6 @@ const SignatureView = observer((props: any) => {
       />
     );
   }
-
-  console.log(signatureProps);
 
   return (
     <SignatureScreen
@@ -130,21 +126,20 @@ const SignatureView = observer((props: any) => {
 });
 
 const ActionGroupBottom = observer((props: any) => {
-  const { meta, onSave, actionSnap, actionReset } = props;
+  const {meta, onSave, actionSnap, actionReset} = props;
   const Theme = useTheme();
 
   return (
     <View
       style={{
-        position: "absolute",
+        position: 'absolute',
         left: 0,
         right: 0,
         bottom: 0,
-        backgroundColor: "transparent",
-        justifyContent: "center",
-        alignItems: "center",
-      }}
-    >
+        backgroundColor: 'transparent',
+        justifyContent: 'center',
+        alignItems: 'center',
+      }}>
       <View
         shadow
         style={{
@@ -153,12 +148,11 @@ const ActionGroupBottom = observer((props: any) => {
           borderRadius: 8,
           marginHorizontal: 10,
           marginVertical: 20,
-          flexDirection: "row",
+          flexDirection: 'row',
           height: 45,
-          justifyContent: "center",
-          alignItems: "center",
-        }}
-      >
+          justifyContent: 'center',
+          alignItems: 'center',
+        }}>
         <ActionSnap
           actionSnap={actionSnap}
           actionReset={actionReset}
@@ -170,7 +164,7 @@ const ActionGroupBottom = observer((props: any) => {
   );
 });
 
-const ActionSnap = observer(({ actionReset, meta }: any) => {
+const ActionSnap = observer(({actionReset, meta}: any) => {
   const Theme = useTheme();
 
   return (
@@ -182,14 +176,13 @@ const ActionSnap = observer(({ actionReset, meta }: any) => {
         margin: 0,
       }}
       onPress={actionReset}
-      disabled={!meta.dataURI && !meta.tempURI}
-    >
+      disabled={!meta.dataURI && !meta.tempURI}>
       <Icon name="md-refresh" color={Theme.colors.text} size={30} />
     </Button>
   );
 });
 
-const ActionSave = observer(({ onSave, meta }: any) => {
+const ActionSave = observer(({onSave, meta}: any) => {
   const Theme = useTheme();
 
   if (!meta.dataURI) return null;
@@ -205,18 +198,16 @@ const ActionSave = observer(({ onSave, meta }: any) => {
         backgroundColor: Theme.colors.primary,
       }}
       onPress={onSave}
-      disabled={!meta.dataURI}
-    >
+      disabled={!meta.dataURI}>
       <View
         style={{
           backgroundColor: Theme.colors.secondary,
           width: 60,
           height: 60,
           borderRadius: 999,
-          justifyContent: "center",
-          alignItems: "center",
-        }}
-      >
+          justifyContent: 'center',
+          alignItems: 'center',
+        }}>
         <Icon name="md-checkmark" color={Theme.colors.textLight} size={34} />
       </View>
     </Button>
