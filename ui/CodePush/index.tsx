@@ -1,18 +1,20 @@
-import AppConfig from "../../config/app";
-import React, { ReactElement, ReactNode, useEffect, useState } from "react";
-import { ViewProps } from "react-native";
-import codePush from "react-native-code-push";
-import codePushOptions from "../../config/code-push";
-import Loading from "./Loading";
+import AppConfig from '../../config/app';
+import React, {ReactElement, ReactNode, useEffect, useState} from 'react';
+import {ViewProps} from 'react-native';
+import codePush from 'react-native-code-push';
+import codePushOptions from '../../config/code-push';
+import Loading from './Loading';
 
 interface ICodePush extends ViewProps {
   children: ReactNode;
   LoadingComponent?: (props: any) => ReactElement;
+  onUpdateInstalled?: () => void | Promise<void>;
 }
 
 const Main = (props: ICodePush) => {
+  const {onUpdateInstalled, LoadingComponent, children} = props;
   const [loading, setLoading] = useState(true);
-  const [syncMessage, setSyncMessage] = useState("");
+  const [syncMessage, setSyncMessage] = useState('');
   const [progress, setProgress] = useState(null);
   const init = async () => {
     if (!loading) setLoading(true);
@@ -20,56 +22,59 @@ const Main = (props: ICodePush) => {
     codePush.getUpdateMetadata(codePush.UpdateState.RUNNING);
     codePush.sync(
       codePushOptions,
-      (syncStatus: any) => {
+      async (syncStatus: any) => {
         switch (syncStatus) {
           case codePush.SyncStatus.SYNC_IN_PROGRESS:
-            setSyncMessage("Loading...");
+            setSyncMessage('Loading...');
             setTimeout(() => {
               setLoading(false);
             }, 15000);
             break;
           case codePush.SyncStatus.CHECKING_FOR_UPDATE:
-            setSyncMessage("Checking for update...");
+            setSyncMessage('Checking for update...');
             break;
           case codePush.SyncStatus.DOWNLOADING_PACKAGE:
-            setSyncMessage("Downloading update...");
+            setSyncMessage('Downloading update...');
             break;
           case codePush.SyncStatus.AWAITING_USER_ACTION:
-            setSyncMessage("Awaiting user action...");
+            setSyncMessage('Awaiting user action...');
             break;
           case codePush.SyncStatus.INSTALLING_UPDATE:
-            setSyncMessage("Installing update...");
+            setSyncMessage('Installing update...');
             break;
           case codePush.SyncStatus.UP_TO_DATE:
-            setSyncMessage("App up to date.");
+            setSyncMessage('App up to date.');
             setLoading(false);
             break;
           case codePush.SyncStatus.UPDATE_INSTALLED:
-            setSyncMessage("Update installed, restarting the app.");
+            if (!!onUpdateInstalled) {
+              await onUpdateInstalled();
+            }
+            setSyncMessage('Update installed, restarting the app.');
             codePush.restartApp();
             break;
           default:
-            setSyncMessage("An unknown error occurred.");
+            setSyncMessage('An unknown error occurred.');
             setLoading(false);
             break;
         }
       },
       (progress: any) => {
         setProgress(progress);
-      }
+      },
     );
   };
 
   useEffect(() => {
-    if (AppConfig.mode === "dev") {
+    if (AppConfig.mode === 'dev') {
       setLoading(false);
     } else {
       init();
     }
   }, []);
 
-  if (!!loading && !!props.LoadingComponent) {
-    return props.LoadingComponent({
+  if (!!loading && !!LoadingComponent) {
+    return LoadingComponent({
       progress,
       syncMessage,
     });
@@ -77,6 +82,6 @@ const Main = (props: ICodePush) => {
     return <Loading progress={progress} syncMessage={syncMessage} />;
   }
 
-  return props.children;
+  return children;
 };
 export default codePush(codePushOptions)(Main);
